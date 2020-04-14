@@ -12,7 +12,7 @@
     "start:debug": "nodemon --config nodemon-debug.json",
     "prestart:prod": "rimraf dist && npm run build",
     "postinstall": "npm run prestart:prod",
-    "start:prod": "node --max_old_space_size=2560 dist/main.js",
+    "start:prod": "node -r ./tsconfig-paths-bootstrap.js --max_old_space_size=2560 dist/main.js",
     "lint": "tslint -p tsconfig.json -c tslint.json",
     "test": "jest",
     "test:watch": "jest --watch",
