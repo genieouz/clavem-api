@@ -1,4 +1,4 @@
-import { UserGender } from '~/user/types/user-gender';
+import { UserGender } from '~/user/enums/user-gender';
 import { InputType, Field, ID } from 'type-graphql';
 
 @InputType()

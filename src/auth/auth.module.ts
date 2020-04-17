@@ -1,5 +1,4 @@
 import { JwtStrategy } from '~/auth/jwt.strategy';
-import { AuthResolver } from '~/auth/resolvers/auth.resolver';
 import { UserModule } from '~/user/user.module';
 import { Module } from '@nestjs/common';
 import { AuthService } from '~/auth/services/auth.service';
@@ -20,7 +19,6 @@ import { AuthController } from './controllers/auth.controller';
   ],
   providers: [
     AuthService,
-    AuthResolver,
     JwtStrategy,
     TokenService
   ],

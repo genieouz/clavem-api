@@ -5,6 +5,7 @@ import { TOKEN_SECRET } from '~/commons/config/env';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 import { PassportStrategy } from '@nestjs/passport';
 import { Injectable } from '@nestjs/common';
+import { UserEntity } from '~/user/entities/user.entity';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
@@ -16,7 +17,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  async validate(payload: AnyObject): Promise<IUser> {
+  async validate(payload: AnyObject): Promise<UserEntity> {
     return this.userService.findOneById(payload.sub);
   }
 }

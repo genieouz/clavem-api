@@ -1,5 +1,5 @@
-import { UserGender } from '~/user/types/user-gender';
-import { UserRoles } from '~/user/types/user.roles';
+import { UserGender } from '~/user/enums/user-gender';
+import { UserRoles } from '~/user/enums/user.roles';
 import { Schema } from 'mongoose';
 
 export const UserSchema = new Schema({

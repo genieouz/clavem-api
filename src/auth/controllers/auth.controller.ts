@@ -1,20 +1,20 @@
 import { Controller, Post, Body } from '@nestjs/common';
-import { IUser } from '~/user/interfaces/user.interface';
-import { AuthService } from '../services/auth.service';
-import { ISession } from '../interface/session.interface';
-import { ILoginCredentials } from '../interface/login-credentials.interface';
+import { AuthService } from '~/auth/services/auth.service';
+import { LoginDto } from '~/auth/dto/login.dto';
+import { SessionEntity } from '~/auth/entities/session.entity';
+import { RegisterDto } from '~/auth/dto/register.dto';
 
 @Controller()
 export class AuthController {
     constructor(private readonly authService: AuthService) { }
 
     @Post('signup')
-    signup(@Body() user: IUser): Promise<ISession> {
+    signup(@Body() user: RegisterDto): Promise<SessionEntity> {
         return this.authService.signup(user);
     }
 
     @Post('signin')
-    signin(@Body() credentials: ILoginCredentials): Promise<ISession> {
+    signin(@Body() credentials: LoginDto): Promise<SessionEntity> {
         return this.authService.signin(credentials);
     }
 }

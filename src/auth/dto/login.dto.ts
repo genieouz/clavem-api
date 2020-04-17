@@ -1,4 +1,5 @@
-export interface ILoginCredentials {
+
+export class LoginDto {
     email: string;
     password: string;
 }
