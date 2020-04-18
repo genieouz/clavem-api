@@ -15,7 +15,15 @@
       "~/*": [
         "./src/*"
       ]
-    }
+    },
+    "plugins": [
+      {
+        "name": "@nestjs/swagger/plugin",
+        "options": {
+          "classValidatorShim": false
+        }
+      }
+    ]
   },
   "exclude": [
     "node_modules"

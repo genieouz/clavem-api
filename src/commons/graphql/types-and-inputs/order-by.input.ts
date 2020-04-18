@@ -1,11 +1,12 @@
 import { Field, InputType } from 'type-graphql';
 import { OrderByDirection } from '~/commons/graphql/types-and-inputs/order-by-direction';
+import { ApiProperty } from '@nestjs/swagger';
 
 @InputType()
 export class OrderByInput {
-  @Field()
+  @ApiProperty()
   public property: string;
 
-  @Field(type => OrderByDirection)
+  @ApiProperty({ type: OrderByDirection })
   public direction?: OrderByDirection | number;
 }

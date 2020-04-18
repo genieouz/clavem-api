@@ -12,7 +12,7 @@ import {
     normalizeClientFilterForCount,
     normalizeClientFilterForSearch,
 } from '~/commons/utils';
-import { IFindManyResult } from '../database/typings/find-many-result.interface';
+import { FindManyResult } from '../database/typings/find-many-result.interface';
 
 export abstract class AbstractService<T extends Document> {
     private abstractModel: Model<T>;
@@ -59,7 +59,7 @@ export abstract class AbstractService<T extends Document> {
     public async findMany(
         queryFilter: AnyObject,
         clientFilter: ClientFilterInput = {},
-    ): Promise<IFindManyResult<T>> {
+    ): Promise<FindManyResult<T>> {
         const { offset, limit, filter, orderBy } = normalizeClientFilterForSearch(
             clientFilter,
         );
@@ -72,7 +72,7 @@ export abstract class AbstractService<T extends Document> {
             })
             .skip(offset)
             .limit(limit);
-        const results: IFindManyResult<T> = <IFindManyResult<T>>{
+        const results: FindManyResult<T> = <FindManyResult<T>>{
             records: records,
             recordsLength: records.length,
             totalRecords: totalRecords,
@@ -293,7 +293,7 @@ export abstract class AbstractService<T extends Document> {
         queryFilter: AnyObject,
         payload: AnyObject,
         opts?: ClientFilterInput,
-    ): Promise<IFindManyResult<T>> {
+    ): Promise<FindManyResult<T>> {
         await this.updateMany(queryFilter, payload, opts);
         return this.findMany(queryFilter, opts);
     }
