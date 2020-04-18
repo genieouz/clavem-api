@@ -12,6 +12,7 @@ import {
     normalizeClientFilterForCount,
     normalizeClientFilterForSearch,
 } from '~/commons/utils';
+import { IFindManyResult } from '../database/typings/find-many-result.interface';
 
 export abstract class AbstractService<T extends Document> {
     private abstractModel: Model<T>;
@@ -34,10 +35,10 @@ export abstract class AbstractService<T extends Document> {
         payload: AnyObject,
     ): Promise<T> {
         return this.abstractModel.findOneAndUpdate(queryFilter, payload, {
-          upsert: true,
-          new: true,
-          useFindAndModify: false,
-          setDefaultsOnInsert: true,
+            upsert: true,
+            new: true,
+            useFindAndModify: false,
+            setDefaultsOnInsert: true,
         });
     }
 
@@ -58,18 +59,29 @@ export abstract class AbstractService<T extends Document> {
     public async findMany(
         queryFilter: AnyObject,
         clientFilter: ClientFilterInput = {},
-    ): Promise<T[]> {
+    ): Promise<IFindManyResult<T>> {
         const { offset, limit, filter, orderBy } = normalizeClientFilterForSearch(
             clientFilter,
         );
         const filterWith = mergeQueryFilters(queryFilter, filter);
-        return this.abstractModel
+        const totalRecords: number = await this.abstractModel.count(filterWith);
+        const records: T[] = await this.abstractModel
             .find(filterWith)
             .sort({
                 [orderBy.property]: orderBy.direction,
             })
             .skip(offset)
             .limit(limit);
+        const results: IFindManyResult<T> = <IFindManyResult<T>>{
+            records: records,
+            recordsLength: records.length,
+            totalRecords: totalRecords,
+            offset: offset,
+            limit: limit,
+            pages: Math.ceil(totalRecords / limit),
+            currentPage: Math.ceil((offset + records.length) / limit),
+        };
+        return results;
     }
 
     public async findManyByIds(
@@ -112,7 +124,7 @@ export abstract class AbstractService<T extends Document> {
         opts?: ClientFilterInput,
     ): Promise<void> {
         const found = await this.findMany(queryFilter, opts);
-        if (found.length > 0) {
+        if (found.records.length > 0) {
             throw new ConflictException();
         }
     }
@@ -281,7 +293,7 @@ export abstract class AbstractService<T extends Document> {
         queryFilter: AnyObject,
         payload: AnyObject,
         opts?: ClientFilterInput,
-    ): Promise<T[]> {
+    ): Promise<IFindManyResult<T>> {
         await this.updateMany(queryFilter, payload, opts);
         return this.findMany(queryFilter, opts);
     }

@@ -83,13 +83,13 @@ export function normalizeClientFilterForSearch(
   if (clientFilter.offset === undefined) {
     normalized.offset = 0;
   } else {
-    normalized.offset = clientFilter.offset;
+    normalized.offset = parseInt(String(clientFilter.offset));
   }
 
   if (clientFilter.limit === undefined || clientFilter.limit < 1) {
     normalized.limit = defaultQueryLimit;
   } else {
-    normalized.limit = clientFilter.limit;
+    normalized.limit = parseInt(String(clientFilter.limit));
   }
 
   if (isEmpty(clientFilter.filter)) {
