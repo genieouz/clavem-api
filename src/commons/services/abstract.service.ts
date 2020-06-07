@@ -72,7 +72,7 @@ export abstract class AbstractService<T extends Document> {
             })
             .skip(offset)
             .limit(limit);
-        const results: FindManyResult<T> = <FindManyResult<T>>{
+        const results: FindManyResult<T> = {
             records: records,
             recordsLength: records.length,
             totalRecords: totalRecords,
@@ -80,7 +80,7 @@ export abstract class AbstractService<T extends Document> {
             limit: limit,
             pages: Math.ceil(totalRecords / limit),
             currentPage: Math.ceil((offset + records.length) / limit),
-        };
+        } as FindManyResult<T>;
         return results;
     }
 
@@ -165,7 +165,7 @@ export abstract class AbstractService<T extends Document> {
                 new: true,
                 useFindAndModify: false,
                 setDefaultsOnInsert: true,
-            }
+            },
         );
         if (!result) {
             throw new NotFoundException();

@@ -1,5 +1,4 @@
 import { UserService } from '~/user/services/user.service';
-import { IUser } from '~/user/interfaces/user.interface';
 import { AnyObject } from '~/commons/typings/typescript';
 import { TOKEN_SECRET } from '~/commons/config/env';
 import { ExtractJwt, Strategy } from 'passport-jwt';

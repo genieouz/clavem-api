@@ -1,1 +1,1 @@
-export const defaultQueryLimit = 10;
+export const defaultQueryLimit = 20;

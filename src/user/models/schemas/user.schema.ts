@@ -1,6 +1,7 @@
 import { UserGender } from '~/user/enums/user-gender';
-import { UserRoles } from '~/user/enums/user.roles';
+import { UserRoles } from '~/user/enums/user-roles.enum';
 import { Schema } from 'mongoose';
+import { imageSizesNestedObject } from '~/commons/database/field-types/image-size-refs-hash.type';
 
 export const UserSchema = new Schema({
   phoneNumber: {
@@ -32,5 +33,6 @@ export const UserSchema = new Schema({
     type: String,
     default: UserRoles.ORGANIZER,
   },
+  avatar: imageSizesNestedObject,
 
 });

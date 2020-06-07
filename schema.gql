@@ -3,65 +3,67 @@
 # !!!   DO NOT MODIFY THIS FILE BY YOURSELF   !!!
 # -----------------------------------------------
 
-"""
-The javascript `Date` as string. Type represents date and time as the ISO Date string.
-"""
-scalar DateTime
+"""Arbitrary object"""
+scalar Any
 
-type FinalizeRegistration {
-  token: String!
+type AttachmentRecord {
+  id: ID!
+  targetRef: ID!
+  sizeB: Int!
+  extension: String!
 }
 
-input FinalizeRegistrationInput {
-  validationCode: String!
-  validationToken: String!
+type CategoriesEntity {
+  recordsLength: Float!
+  totalRecords: Float!
+  offset: Float!
+  limit: Float!
+  pages: Float!
+  currentPage: Float!
+  records: [CategoryEntity!]!
+}
+
+type CategoryEntity {
+  _id: ID!
+  name: String!
+}
+
+input CategoryInput {
+  name: String!
+}
+
+input ClientFilterInput {
+  offset: Int
+  limit: Int
+  filter: Any
+  search: String
+  orderBy: OrderByInput
 }
 
 type Mutation {
-  updateProfile(userInput: UserInput!): User!
-  startRegistration(startRegistrationInput: StartRegistrationInput!): StartRegistration!
-  finalizeRegistration(finalizeRegistrationInput: FinalizeRegistrationInput!): FinalizeRegistration!
+  createCategory(categoryInput: CategoryInput!): CategoryEntity!
+}
+
+"""OrderBy direction"""
+enum OrderByDirection {
+  Asc
+  Desc
+}
+
+input OrderByInput {
+  property: String!
+  direction: OrderByDirection!
+}
+
+type Paging {
+  recordsLength: Float!
+  totalRecords: Float!
+  offset: Float!
+  limit: Float!
+  pages: Float!
+  currentPage: Float!
 }
 
 type Query {
-  fetchProfile: User!
-  fetchUsers: [User!]!
-}
-
-type StartRegistration {
-  validationCode: String!
-  validationToken: String!
-}
-
-input StartRegistrationInput {
-  phone: Float!
-  countryCode: Float!
-}
-
-type User {
-  _id: ID!
-  phone: Float!
-  countryCode: Float!
-  role: UserRoles!
-  fullName: String!
-  gender: UserGender!
-  birthDate: DateTime!
-}
-
-enum UserGender {
-  MALE
-  FEMALE
-}
-
-input UserInput {
-  fullName: String
-  gender: UserGender
-  birthDate: DateTime
-}
-
-"""User role"""
-enum UserRoles {
-  USER
-  ADMIN
-  ORGANIZER
+  fetchCategories: CategoriesEntity!
 }

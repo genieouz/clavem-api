@@ -1,3 +1,4 @@
+import { GqlExecutionContext } from '@nestjs/graphql';
 import { AnyObject } from '~/commons/typings/typescript';
 import { ClientFilterInput } from '~/commons/graphql/types-and-inputs/client-filter.input';
 import { forOwn, isEmpty, pull } from 'lodash';
@@ -5,6 +6,7 @@ import { defaultQueryLimit } from '~/commons/graphql/graphql-constants';
 import { ExecutionContext } from '@nestjs/common';
 import { OrderByDirection } from '~/commons/graphql/types-and-inputs/order-by-direction';
 import { Validator } from 'class-validator';
+import { Response } from 'express';
 
 export function applyClientFilterToArray(
   array: any[],
@@ -83,13 +85,13 @@ export function normalizeClientFilterForSearch(
   if (clientFilter.offset === undefined) {
     normalized.offset = 0;
   } else {
-    normalized.offset = parseInt(String(clientFilter.offset));
+    normalized.offset = clientFilter.offset;
   }
 
   if (clientFilter.limit === undefined || clientFilter.limit < 1) {
     normalized.limit = defaultQueryLimit;
   } else {
-    normalized.limit = parseInt(String(clientFilter.limit));
+    normalized.limit = clientFilter.limit;
   }
 
   if (isEmpty(clientFilter.filter)) {
@@ -161,4 +163,23 @@ export function popFirst(array: any[], fn: (value: any) => boolean): any[] {
     array.splice(index, 1);
   }
   return array;
+}
+
+export function getRequestFromContext(
+  context: ExecutionContext,
+): any {
+  return (
+    context.switchToHttp().getRequest() ||
+    GqlExecutionContext.create(context).getContext().req
+  );
+}
+
+export function setupDownloadHeaders(
+  res: Response,
+  filename: string = 'unnamed',
+  mimeType?: string,
+): Response {
+  res.set('Content-Type', mimeType || 'application/octet-stream');
+  res.set('Content-Disposition', `attachment;filename=${filename}`);
+  return res;
 }

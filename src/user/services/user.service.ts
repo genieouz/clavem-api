@@ -9,7 +9,7 @@ import { UserEntity } from '~/user/entities/user.entity';
 @Injectable()
 export class UserService extends AbstractService<UserEntity> {
     constructor(
-        @InjectModel(userModelName) private readonly userModel: Model<UserEntity>
+        @InjectModel(userModelName) private readonly userModel: Model<UserEntity>,
     ) {
         super(userModel);
     }

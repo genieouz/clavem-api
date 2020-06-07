@@ -3,23 +3,25 @@ import { Field, InputType, Int } from 'type-graphql';
 import { AnyObject } from '~/commons/typings/typescript';
 import { Any } from '../scalars/any.scalar';
 import { OrderByInput } from '~/commons/graphql/types-and-inputs/order-by.input';
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 
+@InputType()
 export class ClientFilterInput {
-  @ApiPropertyOptional()
+  @Field(type => Int, { nullable: true })
   @Min(0)
+  @IsOptional()
   public offset?: number;
 
-  @ApiPropertyOptional()
+  @Field(type => Int, { nullable: true })
   @Min(1)
+  @IsOptional()
   public limit?: number;
 
-  @ApiPropertyOptional()
+  @Field(type => Any, { nullable: true })
   public filter?: AnyObject;
 
-  @ApiPropertyOptional()
+  @Field(type => String, { nullable: true })
   public search?: string;
 
-  @ApiPropertyOptional({ type: OrderByInput })
+  @Field(type => OrderByInput, { nullable: true })
   public orderBy?: OrderByInput;
 }

@@ -1,24 +1,25 @@
-import { ApiProperty } from "@nestjs/swagger";
+import { ObjectType, Field } from "type-graphql";
 
+@ObjectType()
 export class FindManyResult<T> {
-    @ApiProperty()
+    @Field()
     recordsLength: number;
 
-    @ApiProperty()
+    @Field()
     totalRecords: number;
 
-    @ApiProperty()
+    @Field()
     records: T[];
 
-    @ApiProperty()
+    @Field()
     offset: number;
 
-    @ApiProperty()
+    @Field()
     limit: number;
 
-    @ApiProperty()
+    @Field()
     pages: number;
 
-    @ApiProperty()
+    @Field()
     currentPage: number;
 }

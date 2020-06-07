@@ -1,9 +1,7 @@
 import { UserGender } from '~/user/enums/user-gender';
-import { UserRoles } from '~/user/enums/user.roles';
-import { ObjectType, Field, ID } from "type-graphql";
+import { UserRoles } from '~/user/enums/user-roles.enum';
 import { ApiProperty } from '@nestjs/swagger';
 
-@ObjectType()
 export class UserEntity {
   @ApiProperty()
   public _id: string;
@@ -11,10 +9,10 @@ export class UserEntity {
   @ApiProperty()
   public countryCode: string;
 
-  @ApiProperty({ type: UserRoles })
+  @ApiProperty({ enum: UserRoles })
   public role: UserRoles;
 
-  @ApiProperty()
+  @ApiProperty({ enum: UserGender })
   public gender?: UserGender;
 
   @ApiProperty()

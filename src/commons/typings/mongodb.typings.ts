@@ -6,3 +6,7 @@ import { AnyObject } from '~/commons/typings/typescript';
 export type AggregationQuery = AnyObject[];
 
 export type AggregationResult = AnyObject[];
+
+export const mongoConnectionOptions = {
+  poolSize: 2,
+};
