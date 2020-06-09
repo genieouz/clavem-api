@@ -1,22 +1,80 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { ImageSizes } from '~/commons/graphql/types-and-inputs/image-sizes.type';
+import { ImageSizes } from "~/commons/graphql/types-and-inputs/image-sizes.type";
+import { ITicketRequirements } from "~/event/models/interfaces/ticket-requirements.interface";
+import { IReservationRequirements } from "~/event/models/interfaces/reservation-requirements.interface";
+import { ITicket } from "~/event/models/interfaces/ticket.interface";
+import { EventAccessType } from "~/event/enums/event-access-type.enum";
+import { EventType } from "~/event/enums/event-type.enum";
+import { EventStatus } from "~/event/enums/event-status.enum";
+import { ObjectType, Field, ID } from 'type-graphql';
+import { TicketRequirements } from "./ticket-requirements.entity";
+import { Ticket } from "./ticket.entity";
+import { ReservationRequirements } from "./reservation-requirements.entity";
 
+@ObjectType()
 export class EventEntity {
-    @ApiProperty()
-    public _id: string;
+    @Field(type => ID)
+    _id: string;
 
-    @ApiProperty()
-    public description: string;
+    @Field()
+    description: string;
 
-    @ApiProperty()
-    public address: string;
+    @Field()
+    address: string;
 
-    @ApiProperty()
-    public date: Date;
+    @Field()
+    locationAccuracy: string;
 
-    @ApiProperty()
-    public statut: string;
+    @Field(type => EventStatus)
+    status: EventStatus;
 
-    @ApiProperty()
-    public poster: ImageSizes;
+    @Field(type => EventType)
+    type: EventType;
+
+    @Field()
+    name: string;
+
+    @Field()
+    catchyPhrase: string;
+
+    @Field()
+    createdBy: string;
+
+    @Field()
+    category: string;
+
+    @Field()
+    startDate: Date;
+
+    @Field()
+    endDate: Date;
+
+    @Field()
+    expectedNumberOfPersons: number;
+
+    @Field(type => EventAccessType)
+    accessType: EventAccessType;
+
+    @Field()
+    keepContactWithParticipant: boolean;
+
+    @Field()
+    paidEntrance: boolean;
+
+    @Field()
+    priceIncludingCharges: boolean;
+
+    @Field()
+    categoryCriteria: string[];
+
+    @Field(type => TicketRequirements)
+    purchasedTicketInvolveFreeTicket: ITicketRequirements;
+
+    @Field(type => Ticket)
+    tikets: ITicket[];
+
+    @Field(type => ReservationRequirements)
+    reservation: IReservationRequirements;
+
+    @Field(type => ImageSizes)
+    poster: ImageSizes;
 }
