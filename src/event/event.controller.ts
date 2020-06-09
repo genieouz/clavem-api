@@ -1,5 +1,5 @@
-import { Controller, Put, UseInterceptors, UseGuards, Body, UploadedFile, Post, UnprocessableEntityException, Param, Res, HttpStatus, Get } from '@nestjs/common';
-import { FileInterceptor } from '@nestjs/platform-express';
+import { Controller, Put, UseInterceptors, UseGuards, Body, UploadedFile, Post, UnprocessableEntityException, Param, Res, HttpStatus, Get, UploadedFiles } from '@nestjs/common';
+import { FileInterceptor, FilesInterceptor, FileFieldsInterceptor } from '@nestjs/platform-express';
 import { CurrentUser } from '~/auth/decorators/current-user.decorator';
 import { IUser } from '~/user/interfaces/user.interface';
 import { IncomingFile } from '~/commons/multimedia/typings/incoming-file';
@@ -11,6 +11,8 @@ import { maxFileSizeForEventPosters } from '~/multimedia/images/images-restricti
 import { allowedImageFormats } from '~/multimedia/images/images-restrictions';
 import { imageFilter } from '~/multimedia/images/image-filter';
 import { AuthGuard } from '~/auth/guards/auth-guard';
+import { EventDto } from '~/event/dto/event.dto';
+import { EventEntity } from '~/event/entity/event.entity';
 
 @Controller('event')
 @UseGuards(AuthGuard)
@@ -21,58 +23,55 @@ export class EventController {
         private eventService: EventService,
     ) {}
     @Post('create')
-    @UseInterceptors(FileInterceptor('poster'))
+    @UseInterceptors(FileFieldsInterceptor([
+        { name: 'poster', maxCount: 1 },
+        { name: 'archives', maxCount: 50 },
+    ]))
     public async createEvent(
-        @Body('targetRef') targetRef: string,
-        @UploadedFile() file: IncomingFile,
+        @Body() eventDto: EventDto,
+        @UploadedFiles() files,
         @CurrentUser() currentUser: IUser,
-    ): Promise<AttachmentRecord> {
-        
-        if (file === undefined) {
+    ): Promise<EventEntity> {
+        const poster = files.poster[0];
+        const archives = files.archives;
+        const event = await this.eventService.insertOne(eventDto);
+        if (poster === undefined) {
             const errorMessage = `Supported image formats: ${allowedImageFormats.join(
                 ', ',
             )}; Max file size: ${maxFileSizeForEventPosters} bytes`;
             throw new UnprocessableEntityException(errorMessage);
         }
-        this.eventPosterService.rewriteEventPoster(file, 'eventId');
-
-        await this.attachmentsService.failIfFound({
-            targetRef,
+        this.eventPosterService.rewriteEventPoster(poster, event._id);
+        const archiveFiles: Promise<AttachmentRecord>[] = [];
+        if(archives && archives.length) {
+            archives.map((file: IncomingFile) => {
+                archiveFiles.push(this.attachmentsService.putAttachment(
+                    file,
+                    {
+                        uploadedBy: currentUser._id,
+                    },
+                    currentUser._id,
+                ));
+            });
+        }
+        return this.eventService.updateOneById(event._id, {
+            archives: await Promise.all(archiveFiles),
         });
-
-         this.attachmentsService.putAttachment(
-            file,
-            {
-                uploadedBy: currentUser._id,
-            },
-            currentUser._id,
-        );
-        return;
     }
 
-    // @UseGuards(AuthGuard('jwt'))
     @Put('poster')
     @UseInterceptors(FileInterceptor('file', { fileFilter: imageFilter }))
-    public async uploadAvatar(
+    public async uploadPoster(
+        @Body('eventId') eventId: string, 
         @UploadedFile() file: IncomingFile,
-        currentUser: IUser = { _id: '5e9aca1fd1c3ad155b6d1c10' } as IUser,
+        @CurrentUser() currentUser: IUser,
     ): Promise<any> {
-        console.log(currentUser);
         if (file === undefined) {
             const errorMessage = `Supported image formats: ${allowedImageFormats.join(
                 ', ',
             )}; Max file size: ${maxFileSizeForEventPosters} bytes`;
             throw new UnprocessableEntityException(errorMessage);
         }
-        return this.eventPosterService.rewriteEventPoster(file, 'eventId');
-    }
-
-    @Get('poster/:id')
-    public async getAvatar(@Param('id') id: string, @Res() res): Promise<void> {
-        const rs = await this.eventPosterService.findOneById(id);
-        if (rs === null) {
-            return res.sendStatus(HttpStatus.NOT_FOUND);
-        }
-        rs.pipe(res);
+        return this.eventPosterService.rewriteEventPoster(file, eventId);
     }
 }

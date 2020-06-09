@@ -22,10 +22,6 @@ export const attachmentRecordSchema = new Schema(
       type: String,
       require: true,
     },
-    targetRef: {
-      type: String,
-      required: true,
-    },
     sizeB: {
       type: Number,
       required: true,

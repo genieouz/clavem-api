@@ -7,6 +7,7 @@ import { EventType } from '~/event/enums/event-type.enum';
 import { EventAccessType } from '~/event/enums/event-access-type.enum';
 import { TicketSchema } from '~/event/models/schemas/ticket.schema';
 import { EventStatus } from '~/event/enums/event-status.enum';
+import { attachmentRecordSchema } from '~/attachment/models/schemas/attachment-record.schema';
 
 export const EventSchema = new Schema({
     description: {
@@ -21,60 +22,60 @@ export const EventSchema = new Schema({
     status: {
         type: String,
         enum: Object.keys(EventStatus),
-        default: EventStatus.Actived,
+        default: EventStatus.Desactivated,
     },
     type: {
         type: String,
         enum: Object.keys(EventType),
-        required: true,
+        required: false,
     },
     name: {
         type: String,
-        required: true,
+        required: false,
     },
     catchyPhrase: {
         type: String,
-        required: true
+        required: false
     },
     createdBy: {
         type: Schema.Types.ObjectId,
         ref: userModelName,
-        required: true,
+        required: false,
     },
     category: {
         type: Schema.Types.ObjectId,
         ref: categoryModelName,
-        required: true,
+        required: false,
     },
     poster: imageSizesNestedObject,
     startDate: {
         type: Date,
-        required: true,
+        required: false,
     },
     endDate: {
         type: Date,
-        required: true,
+        required: false,
     },
     expectedNumberOfPersons: {
         type: Number,
-        required: true,
+        required: false,
     },
     accessType: {
         type: String,
         enum: Object.keys(EventAccessType),
-        required: true,
+        required: false,
     },
     keepContactWithParticipant: {
         type: Boolean,
-        required: true,
+        required: false,
     },
     paidEntrance: {
         type: Boolean,
-        required: true
+        required: false
     },
     priceIncludingCharges: {
         type: Boolean,
-        required: true
+        required: false
     },
     categoryCriteria: {
         type: [String],
@@ -101,5 +102,8 @@ export const EventSchema = new Schema({
             percentageToPay: { type: Number },
             limiteDateConfirmation: { type: Date }
         }
+    },
+    archives: {
+        type: [attachmentRecordSchema]
     }
 });

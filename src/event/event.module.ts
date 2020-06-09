@@ -8,6 +8,7 @@ import { AttachmentModule } from '~/attachment/attachment.module';
 import { ImagesModule } from '~/multimedia/images/images.module';
 import { ticketModelName } from '~/event/models/ticket.model-name';
 import { TicketSchema } from '~/event/models/schemas/ticket.schema';
+import { EventPublicController } from '~/event/event-public.controller';
 
 @Module({
   imports: [
@@ -18,7 +19,7 @@ import { TicketSchema } from '~/event/models/schemas/ticket.schema';
     AttachmentModule,
     forwardRef(() => ImagesModule),
   ],
-  controllers: [EventController],
+  controllers: [EventController, EventPublicController],
   providers: [EventService],
   exports: [
     MongooseModule,

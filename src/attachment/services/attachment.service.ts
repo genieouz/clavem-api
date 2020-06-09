@@ -58,7 +58,6 @@ export class AttachmentsService extends AbstractService<IAttachment> {
       AttachmentRecord,
       doc.toObject({ virtuals: true }),
     );
-    console.log(attachmentRecord);
     return attachmentRecord;
   }
 }

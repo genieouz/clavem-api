@@ -5,9 +5,6 @@ export class AttachmentRecord {
   @Field(type =>  ID)
   public id: string;
 
-  @Field(type => ID)
-  public targetRef: string;
-
   @Field(type => Int)
   public sizeB: string;
 

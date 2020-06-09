@@ -27,5 +27,5 @@ export class EventDto {
     purchasedTicketInvolveFreeTicket: ITicketRequirements;
     tikets: ITicket[];
     reservation: IReservationRequirements;
-    poster: ImageSizes;
+    // poster: ImageSizes;
 }
