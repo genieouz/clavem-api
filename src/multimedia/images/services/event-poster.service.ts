@@ -13,8 +13,8 @@ import { Connection } from 'mongoose';
 import { AbstractBucket } from '~/commons/services/abstract.bucket';
 import { databaseConnectionName } from '~/commons/database/database-connection-name';
 import { EventService } from '~/event/event.service';
-import { IEvent } from '~/event/interface/event.interface';
 import { transformBufferToReadableStream } from '~/commons/multimedia/utils';
+import { EventEntity } from '~/event/entity/event.entity';
 
 @Injectable()
 export class EventPosterService extends AbstractBucket {
@@ -72,7 +72,7 @@ export class EventPosterService extends AbstractBucket {
   public async writeEventPosterSize(
     incomingFile,
     imageSize: ImageSize,
-    event: IEvent,
+    event: EventEntity,
   ): Promise<MongooseGridFSBucketFile> {
     return new Promise(async (resolve, reject) => {
       const jimpImg = await Jimp.read(incomingFile.buffer);

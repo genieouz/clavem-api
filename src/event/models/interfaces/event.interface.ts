@@ -1,12 +1,15 @@
 import { ImageSizes } from "~/commons/graphql/types-and-inputs/image-sizes.type";
-import { ITicketRequirements } from "~/event/models/interfaces/ticket-requirements.interface";
-import { IReservationRequirements } from "~/event/models/interfaces/reservation-requirements.interface";
-import { ITicket } from "~/event/models/interfaces/ticket.interface";
+import { ITicketRequirements } from "./ticket-requirements.interface";
+import { IReservationRequirements } from "./reservation-requirements.interface";
+import { ITicket } from "./ticket.interface";
 import { EventAccessType } from "~/event/enums/event-access-type.enum";
+import { IUser } from "~/user/interfaces/user.interface";
+import { ICategory } from "~/category/interfaces/category.interface";
 import { EventType } from "~/event/enums/event-type.enum";
 import { EventStatus } from "~/event/enums/event-status.enum";
 
-export class EventDto {
+export interface IEvent {
+    _id: string;
     description: string;
     address: string;
     locationAccuracy: string;
@@ -14,8 +17,8 @@ export class EventDto {
     type: EventType;
     name: string;
     catchyPhrase: string;
-    createdBy: string;
-    category: string;
+    createdBy: IUser;
+    category: ICategory;
     startDate: Date;
     endDate: Date;
     expectedNumberOfPersons: number;

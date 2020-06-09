@@ -7,7 +7,7 @@ import { AttachmentsService } from '~/attachment/services/attachment.service';
 import { AttachmentRecord } from '~/attachment/dto/attachment-record.type';
 import { EventService } from '~/event/event.service';
 import { EventPosterService } from '~/multimedia/images/services/event-poster.service';
-import { maxFileSizeForEventPosters } from 'dist/multimedia/images/images-restrictions';
+import { maxFileSizeForEventPosters } from '~/multimedia/images/images-restrictions';
 import { allowedImageFormats } from '~/multimedia/images/images-restrictions';
 import { imageFilter } from '~/multimedia/images/image-filter';
 import { AuthGuard } from '~/auth/guards/auth-guard';
@@ -21,19 +21,21 @@ export class EventController {
         private eventService: EventService,
     ) {}
     @Post('create')
-    @UseInterceptors(FileInterceptor('file'))
+    @UseInterceptors(FileInterceptor('poster'))
     public async createEvent(
         @Body('targetRef') targetRef: string,
         @UploadedFile() file: IncomingFile,
         @CurrentUser() currentUser: IUser,
     ): Promise<AttachmentRecord> {
+        
         if (file === undefined) {
             const errorMessage = `Supported image formats: ${allowedImageFormats.join(
                 ', ',
             )}; Max file size: ${maxFileSizeForEventPosters} bytes`;
             throw new UnprocessableEntityException(errorMessage);
         }
-         this.eventPosterService.rewriteEventPoster(file, 'eventId');
+        this.eventPosterService.rewriteEventPoster(file, 'eventId');
+
         await this.attachmentsService.failIfFound({
             targetRef,
         });
