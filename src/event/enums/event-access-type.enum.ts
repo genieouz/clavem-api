@@ -1,8 +1,8 @@
 import { registerEnumType } from 'type-graphql';
 
 export enum EventAccessType {
-    Private = 'Privée',
-    Public = 'Public',
+    Uniq = 'Unique',
+    Free = 'Libre',
 }
 
 registerEnumType(EventAccessType, {

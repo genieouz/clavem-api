@@ -39,6 +39,68 @@ input ClientFilterInput {
   orderBy: OrderByInput
 }
 
+"""
+The javascript `Date` as string. Type represents date and time as the ISO Date string.
+"""
+scalar DateTime
+
+enum EventAccessType {
+  Uniq
+  Free
+}
+
+type EventEntity {
+  _id: ID!
+  description: String!
+  address: String!
+  locationAccuracy: String!
+  status: EventStatus!
+  type: EventType!
+  name: String!
+  catchyPhrase: String!
+  createdBy: UserEntity!
+  category: CategoryEntity!
+  startDate: DateTime!
+  endDate: DateTime!
+  expectedNumberOfPersons: Float!
+  accessType: EventAccessType!
+  keepContactWithParticipant: Boolean!
+  paidEntrance: Boolean!
+  priceIncludingCharges: Boolean!
+  categoryCriteria: [String!]!
+  purchasedTicketInvolveFreeTicket: TicketRequirements!
+  tickets: [Ticket!]!
+  reservation: ReservationRequirements!
+  poster: ImageSizes!
+}
+
+type EventsEntity {
+  recordsLength: Float!
+  totalRecords: Float!
+  offset: Float!
+  limit: Float!
+  pages: Float!
+  currentPage: Float!
+  records: [EventEntity!]!
+}
+
+enum EventStatus {
+  Activated
+  Desactivated
+  Blocked
+}
+
+enum EventType {
+  Private
+  Public
+}
+
+type ImageSizes {
+  sm: ID
+  md: ID
+  lg: ID
+}
+
 type Mutation {
   createCategory(categoryInput: CategoryInput!): CategoryEntity!
 }
@@ -64,5 +126,56 @@ type Paging {
 }
 
 type Query {
+  fetchEvents: EventsEntity!
+  fetchEvent(eventId: ID!): EventEntity!
   fetchCategories: CategoriesEntity!
+}
+
+type ReservationRequirements {
+  allowed: Boolean!
+  payWhenReservation: Boolean!
+  reservationFeeRefundable: Boolean!
+  percentageToPay: Float!
+  limiteDateConfirmation: DateTime!
+}
+
+type Ticket {
+  name: String!
+  categoryCriteria: String!
+  quantity: Float!
+  price: Float!
+}
+
+type TicketRequirements {
+  purchasedTicketInvolveFreeTicket: Boolean!
+  purchasedTickets: TicketRequirementsQuantity!
+  offeredTickets: TicketRequirementsQuantity!
+}
+
+type TicketRequirementsQuantity {
+  quantity: Float!
+  categoryCriteria: String!
+}
+
+type UserEntity {
+  _id: ID!
+  countryCode: String!
+  role: UserRoles!
+  gender: UserGender!
+  birthDate: DateTime!
+  phoneNumber: String!
+  lastName: String!
+  firstName: String!
+  email: String!
+}
+
+enum UserGender {
+  MALE
+  FEMALE
+}
+
+enum UserRoles {
+  USER
+  ADMIN
+  ORGANIZER
 }

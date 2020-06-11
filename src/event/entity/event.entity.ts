@@ -6,9 +6,11 @@ import { EventAccessType } from "~/event/enums/event-access-type.enum";
 import { EventType } from "~/event/enums/event-type.enum";
 import { EventStatus } from "~/event/enums/event-status.enum";
 import { ObjectType, Field, ID } from 'type-graphql';
-import { TicketRequirements } from "./ticket-requirements.entity";
-import { Ticket } from "./ticket.entity";
-import { ReservationRequirements } from "./reservation-requirements.entity";
+import { TicketRequirements } from "~/event/entity/ticket-requirements.entity";
+import { Ticket } from "~/event/entity/ticket.entity";
+import { ReservationRequirements } from "~/event/entity/reservation-requirements.entity";
+import { CategoryEntity } from "~/category/entities/category.entity";
+import { UserEntity } from "~/user/entities/user.entity";
 
 @ObjectType()
 export class EventEntity {
@@ -36,11 +38,11 @@ export class EventEntity {
     @Field()
     catchyPhrase: string;
 
-    @Field()
-    createdBy: string;
+    @Field(type => UserEntity)
+    createdBy: UserEntity;
 
-    @Field()
-    category: string;
+    @Field(type => CategoryEntity)
+    category: CategoryEntity;
 
     @Field()
     startDate: Date;
@@ -63,14 +65,14 @@ export class EventEntity {
     @Field()
     priceIncludingCharges: boolean;
 
-    @Field()
+    @Field(type => [String])
     categoryCriteria: string[];
 
     @Field(type => TicketRequirements)
     purchasedTicketInvolveFreeTicket: ITicketRequirements;
 
     @Field(type => Ticket)
-    tikets: ITicket[];
+    tickets: ITicket[];
 
     @Field(type => ReservationRequirements)
     reservation: IReservationRequirements;

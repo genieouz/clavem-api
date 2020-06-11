@@ -1,7 +1,7 @@
 import { registerEnumType } from 'type-graphql';
 
 export enum EventType {
-    Private = 'Privée',
+    Private = 'Privé',
     Public = 'Public',
 }
 

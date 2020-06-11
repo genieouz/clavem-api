@@ -25,7 +25,7 @@ export class EventDto {
     priceIncludingCharges: boolean;
     categoryCriteria: string[];
     purchasedTicketInvolveFreeTicket: ITicketRequirements;
-    tikets: ITicket[];
+    tickets: ITicket[];
     reservation: IReservationRequirements;
     // poster: ImageSizes;
 }

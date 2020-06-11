@@ -27,7 +27,7 @@ export interface IEvent {
     paidEntrance: boolean;
     priceIncludingCharges: boolean;
     categoryCriteria: string[];
-    purchasedTicketInvolveFreeTicket: ITicketRequirements;
+    offerOnTicketsPurchases: ITicketRequirements;
     tikets: ITicket[];
     reservation: IReservationRequirements;
     poster: ImageSizes;

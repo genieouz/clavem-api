@@ -1,4 +1,7 @@
+import { ITicketRequirementsQuantity } from "~/event/models/interfaces/ticket-requirements-quantity.interface";
+
 export interface ITicketRequirements {
-    purchasedTickets: number;
-    offeredTickets: number;
+    purchasedTicketInvolveFreeTicket: boolean;
+    purchasedTickets: ITicketRequirementsQuantity;
+    offeredTickets: ITicketRequirementsQuantity;
 }

@@ -9,6 +9,9 @@ import { ImagesModule } from '~/multimedia/images/images.module';
 import { ticketModelName } from '~/event/models/ticket.model-name';
 import { TicketSchema } from '~/event/models/schemas/ticket.schema';
 import { EventPublicController } from '~/event/event-public.controller';
+import { EventResolver } from './resolvers/event.resolver';
+import { EventPropertyResolver } from './resolvers/event-property.resolver';
+import { UserModule } from '~/user/user.module';
 
 @Module({
   imports: [
@@ -18,9 +21,14 @@ import { EventPublicController } from '~/event/event-public.controller';
     ]),
     AttachmentModule,
     forwardRef(() => ImagesModule),
+    forwardRef(() => UserModule)
   ],
   controllers: [EventController, EventPublicController],
-  providers: [EventService],
+  providers: [
+    EventService,
+    EventResolver,
+    EventPropertyResolver,
+  ],
   exports: [
     MongooseModule,
     EventService,

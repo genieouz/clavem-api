@@ -80,17 +80,26 @@ export const EventSchema = new Schema({
     categoryCriteria: {
         type: [String],
     },
-    purchasedTicketInvolveFreeTicket: {
+    offerOnTicketsPurchases: {
         type: {
+            purchasedTicketInvolveFreeTicket: {
+                type: Boolean,
+            },
             purchasedTickets: {
-                type: Number,
+                type: {
+                    quantity: Number,
+                    categoryCriteria: String
+                },
             },
             offeredTickets: {
-                type: Number,
+                type: {
+                    quantity: Number,
+                    categoryCriteria: String
+                },
             }
         }
     },
-    tikets: {
+    tickets: {
         type: [TicketSchema],
         default: []
     },

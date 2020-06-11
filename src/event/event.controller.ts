@@ -13,6 +13,7 @@ import { imageFilter } from '~/multimedia/images/image-filter';
 import { AuthGuard } from '~/auth/guards/auth-guard';
 import { EventDto } from '~/event/dto/event.dto';
 import { EventEntity } from '~/event/entity/event.entity';
+import { AnyObject } from '~/commons/typings/typescript';
 
 @Controller('event')
 @UseGuards(AuthGuard)
@@ -28,12 +29,14 @@ export class EventController {
         { name: 'archives', maxCount: 50 },
     ]))
     public async createEvent(
-        @Body() eventDto: EventDto,
+        @Body() eventDto: AnyObject,
         @UploadedFiles() files,
         @CurrentUser() currentUser: IUser,
     ): Promise<EventEntity> {
+        eventDto = JSON.parse(eventDto.formStringify);
         const poster = files.poster[0];
         const archives = files.archives;
+        eventDto.createdBy = currentUser._id;
         const event = await this.eventService.insertOne(eventDto);
         if (poster === undefined) {
             const errorMessage = `Supported image formats: ${allowedImageFormats.join(
