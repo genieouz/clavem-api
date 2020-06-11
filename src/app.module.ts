@@ -17,7 +17,9 @@ import { GraphQLModule } from '@nestjs/graphql';
       useCreateIndex: true,
     }),
     GraphQLModule.forRoot({
-      autoSchemaFile: 'schema.gql'
+      autoSchemaFile: 'schema.gql',
+      introspection: true,
+      playground: true,
     }),
     forwardRef(() => UserModule),
     AuthModule,
