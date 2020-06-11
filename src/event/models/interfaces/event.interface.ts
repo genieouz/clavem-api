@@ -17,7 +17,7 @@ export interface IEvent {
     type: EventType;
     name: string;
     catchyPhrase: string;
-    createdBy: IUser;
+    createdBy: string;
     category: ICategory;
     startDate: Date;
     endDate: Date;
