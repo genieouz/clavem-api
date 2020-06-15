@@ -1,7 +1,10 @@
-import { ObjectType, Field } from 'type-graphql';
+import { ObjectType, Field, ID } from 'type-graphql';
 
 @ObjectType()
 export class Ticket {
+    @Field(type => ID)
+    _id: string;
+
     @Field()
     name: string;
 

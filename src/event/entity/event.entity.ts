@@ -4,13 +4,14 @@ import { IReservationRequirements } from "~/event/models/interfaces/reservation-
 import { ITicket } from "~/event/models/interfaces/ticket.interface";
 import { EventAccessType } from "~/event/enums/event-access-type.enum";
 import { EventType } from "~/event/enums/event-type.enum";
-import { EventStatus } from "~/event/enums/event-status.enum";
+import { EventState } from "~/event/enums/event-state.enum";
 import { ObjectType, Field, ID } from 'type-graphql';
 import { TicketRequirements } from "~/event/entity/ticket-requirements.entity";
 import { Ticket } from "~/event/entity/ticket.entity";
 import { ReservationRequirements } from "~/event/entity/reservation-requirements.entity";
 import { CategoryEntity } from "~/category/entities/category.entity";
 import { UserEntity } from "~/user/entities/user.entity";
+import { EventStatus } from "../enums/event-status.enum";
 
 @ObjectType()
 export class EventEntity {
@@ -25,6 +26,9 @@ export class EventEntity {
 
     @Field()
     locationAccuracy: string;
+
+    @Field(type => EventState)
+    state: EventState;
 
     @Field(type => EventStatus)
     status: EventStatus;

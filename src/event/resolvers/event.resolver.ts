@@ -4,16 +4,33 @@ import { FindManyResult } from "~/commons/database/typings/find-many-result.inte
 import { EventsEntity } from "../entity/events.entity";
 import { EventEntity } from "../entity/event.entity";
 import { EventService } from "../event.service";
+import { CurrentUser } from "~/auth/decorators/current-user.decorator";
+import { IUser } from "~/user/interfaces/user.interface";
+import { UserRoles } from "~/user/enums/user-roles.enum";
+import { ForRoles } from "~/auth/decorators/for-roles.decorator";
+import { UseGuards } from "@nestjs/common";
+import { AuthGuard } from "~/auth/guards/auth-guard";
+import { RolesGuard } from "~/auth/guards/roles.guard";
+import { OrderByDirection } from "~/commons/graphql/types-and-inputs/order-by-direction";
+import { AnyObject } from "~/commons/typings/typescript";
+import { EventState } from "../enums/event-state.enum";
+import { EventStatus } from "../enums/event-status.enum";
 
+@UseGuards(AuthGuard, RolesGuard)
 @Resolver()
 export class EventResolver {
     constructor(private readonly eventService: EventService) { }
 
+    @ForRoles(UserRoles.ADMIN, UserRoles.ORGANIZER)
     @Query(returns => EventsEntity)
-    fetchEvents(): Promise<FindManyResult<EventEntity>> {
-        return this.eventService.findMany({});
+    fetchEvents(
+        @CurrentUser() currentUser: IUser,
+    ): Promise<FindManyResult<EventEntity>> {
+        const filterOnCreatedBy: AnyObject = currentUser.role === UserRoles.ORGANIZER ? { createdBy: currentUser._id } : {};
+        return this.eventService.findMany({ ...filterOnCreatedBy });
     }
 
+    @ForRoles(UserRoles.ADMIN, UserRoles.ORGANIZER)
     @Query(returns => EventEntity)
     fetchEvent(
         @Args({ name: 'eventId', type: () => ID }) eventId: string
@@ -21,4 +38,42 @@ export class EventResolver {
         return this.eventService.findOneById(eventId);
     }
 
+    @Query(returns => EventsEntity)
+    @ForRoles(UserRoles.ADMIN, UserRoles.ORGANIZER)
+    fetchRecentEvents(
+        @CurrentUser() currentUser: IUser,
+    ): Promise<FindManyResult<EventEntity>> {
+        const filterOnCreatedBy: AnyObject = currentUser.role === UserRoles.ORGANIZER ? { createdBy: currentUser._id } : {};
+        return this.eventService.findMany({ startDate: { $gte: new Date() }, ...filterOnCreatedBy }, { limit: 10, orderBy: { property: 'startDate', direction: OrderByDirection.Asc } });
+    }
+
+    @ForRoles(UserRoles.ADMIN, UserRoles.ORGANIZER)
+    @Query(returns => EventsEntity)
+    fetchCategoryEvents(
+        @CurrentUser() currentUser: IUser,
+        @Args({ name: 'categoryId', type: () => ID }) categoryId: string
+    ): Promise<FindManyResult<EventEntity>> {
+        const filterOnCreatedBy: AnyObject = currentUser.role === UserRoles.ORGANIZER ? { createdBy: currentUser._id } : {};
+        return this.eventService.findMany({ category: categoryId, ...filterOnCreatedBy });
+    }
+
+    @ForRoles(UserRoles.ADMIN, UserRoles.ORGANIZER)
+    @Mutation(returns => EventEntity)
+    changeEventState(
+        @CurrentUser() currentUser: IUser,
+        @Args({ name: 'eventId', type: () => ID }) eventId: string,
+        @Args({ name: 'state', type: () => EventState }) state: EventState,
+    ): Promise<EventEntity> {
+        return this.eventService.updateOneById(eventId, { state: state });
+    }
+
+    @ForRoles(UserRoles.ADMIN, UserRoles.ORGANIZER)
+    @Mutation(returns => EventEntity)
+    changeEventStatus(
+        @CurrentUser() currentUser: IUser,
+        @Args({ name: 'eventId', type: () => ID }) eventId: string,
+        @Args({ name: 'status', type: () => EventStatus }) status: EventState,
+    ): Promise<EventEntity> {
+        return this.eventService.updateOneById(eventId, { status: status });
+    }
 }

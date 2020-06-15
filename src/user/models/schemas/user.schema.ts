@@ -35,4 +35,4 @@ export const UserSchema = new Schema({
   },
   avatar: imageSizesNestedObject,
 
-});
+}, { timestamps: true });

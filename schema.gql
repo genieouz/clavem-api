@@ -25,6 +25,15 @@ type CategoriesEntity {
 type CategoryEntity {
   _id: ID!
   name: String!
+  refused: Float!
+  validated: Float!
+  blocked: Float!
+  pending: Float!
+  activated: Float!
+  desactivated: Float!
+  archived: Float!
+  paidEntrance: Float!
+  freeEntrance: Float!
 }
 
 input CategoryInput {
@@ -54,6 +63,7 @@ type EventEntity {
   description: String!
   address: String!
   locationAccuracy: String!
+  state: EventState!
   status: EventStatus!
   type: EventType!
   name: String!
@@ -84,10 +94,17 @@ type EventsEntity {
   records: [EventEntity!]!
 }
 
+enum EventState {
+  ACTIVATED
+  DESACTIVATED
+  ARCHIVED
+}
+
 enum EventStatus {
-  Activated
-  Desactivated
-  Blocked
+  VALIDATED
+  REFUSED
+  PENDING
+  BLOCKED
 }
 
 enum EventType {
@@ -102,7 +119,10 @@ type ImageSizes {
 }
 
 type Mutation {
+  changeEventState(state: EventState!, eventId: ID!): EventEntity!
+  changeEventStatus(status: EventStatus!, eventId: ID!): EventEntity!
   createCategory(categoryInput: CategoryInput!): CategoryEntity!
+  createPromotionalCode(promotionalCodeDto: PromotionalCodeDto!): PromotionalCodeEntity!
 }
 
 """OrderBy direction"""
@@ -125,10 +145,66 @@ type Paging {
   currentPage: Float!
 }
 
+input PromotionalCodeDto {
+  eventId: ID!
+  impact: PromotionalCodeImpact!
+  privateName: String!
+  numberOfGeneratedCodes: Float!
+  tickets: [ID!]!
+  reductionEffect: ReductionEffectDto!
+  publicName: String!
+  usableNumberOfTimes: Float!
+  startDate: DateTime!
+  endDate: DateTime!
+}
+
+type PromotionalCodeEntity {
+  _id: String!
+  eventId: ID!
+  event: EventEntity!
+  impact: PromotionalCodeImpact!
+  privateName: String!
+  numberOfGeneratedCodes: Float!
+  tickets: [Ticket!]!
+  reductionEffect: ReductionEffectEntity!
+  publicName: String!
+  usableNumberOfTimes: Float!
+  startDate: DateTime!
+  endDate: DateTime!
+}
+
+enum PromotionalCodeImpact {
+  MASK_TICKETS
+  APPLY_REDUCTION
+}
+
+type PromotionalCodesEntity {
+  recordsLength: Float!
+  totalRecords: Float!
+  offset: Float!
+  limit: Float!
+  pages: Float!
+  currentPage: Float!
+  records: [PromotionalCodeEntity!]!
+}
+
 type Query {
   fetchEvents: EventsEntity!
   fetchEvent(eventId: ID!): EventEntity!
+  fetchRecentEvents: EventsEntity!
+  fetchCategoryEvents(categoryId: ID!): EventsEntity!
   fetchCategories: CategoriesEntity!
+  fetchPromotionalCodes: PromotionalCodesEntity!
+}
+
+input ReductionEffectDto {
+  inPercentage: Boolean!
+  reduction: Float!
+}
+
+type ReductionEffectEntity {
+  inPercentage: Boolean!
+  reduction: Float!
 }
 
 type ReservationRequirements {
@@ -140,6 +216,7 @@ type ReservationRequirements {
 }
 
 type Ticket {
+  _id: ID!
   name: String!
   categoryCriteria: String!
   quantity: Float!

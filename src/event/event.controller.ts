@@ -22,7 +22,7 @@ export class EventController {
         private readonly attachmentsService: AttachmentsService,
         private readonly eventPosterService: EventPosterService,
         private eventService: EventService,
-    ) {}
+    ) { }
     @Post('create')
     @UseInterceptors(FileFieldsInterceptor([
         { name: 'poster', maxCount: 1 },
@@ -37,6 +37,11 @@ export class EventController {
         const poster = files.poster[0];
         const archives = files.archives;
         eventDto.createdBy = currentUser._id;
+        console.log(JSON.stringify(eventDto));
+        eventDto.startDate = new Date(eventDto.startDate + ' ' + eventDto.startTime);
+        eventDto.endDate = new Date(eventDto.endDate + ' ' + eventDto.endTime);
+        eventDto.reservation.limiteDateConfirmation = new Date(eventDto.reservation.limiteDateConfirmation + ' ' + eventDto.reservation.limiteTimeConfirmation);
+        delete eventDto.reservation.limiteTimeConfirmation;
         const event = await this.eventService.insertOne(eventDto);
         if (poster === undefined) {
             const errorMessage = `Supported image formats: ${allowedImageFormats.join(
@@ -46,7 +51,7 @@ export class EventController {
         }
         this.eventPosterService.rewriteEventPoster(poster, event._id);
         const archiveFiles: Promise<AttachmentRecord>[] = [];
-        if(archives && archives.length) {
+        if (archives && archives.length) {
             archives.map((file: IncomingFile) => {
                 archiveFiles.push(this.attachmentsService.putAttachment(
                     file,
@@ -65,7 +70,7 @@ export class EventController {
     @Put('poster')
     @UseInterceptors(FileInterceptor('file', { fileFilter: imageFilter }))
     public async uploadPoster(
-        @Body('eventId') eventId: string, 
+        @Body('eventId') eventId: string,
         @UploadedFile() file: IncomingFile,
         @CurrentUser() currentUser: IUser,
     ): Promise<any> {

@@ -1,9 +1,10 @@
 import { registerEnumType } from 'type-graphql';
 
 export enum EventStatus {
-    Activated = 'Activated',
-    Desactivated = 'Desactivated',
-    Blocked = 'Bloqué'
+    VALIDATED = 'VALIDATED',
+    REFUSED = 'REFUSED',
+    PENDING = 'PENDING',
+    BLOCKED = 'BLOCKED',
 }
 
 registerEnumType(EventStatus, {

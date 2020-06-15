@@ -8,6 +8,8 @@ import { CategoryModule } from './category/category.module';
 import { EventModule } from './event/event.module';
 import { MultimediaModule } from './multimedia/multimedia.module';
 import { GraphQLModule } from '@nestjs/graphql';
+import { MetricsModule } from './metrics/metrics.module';
+import { PromotionalCodeModule } from './promotional-code/promotional-code.module';
 
 @Module({
   imports: [
@@ -20,6 +22,19 @@ import { GraphQLModule } from '@nestjs/graphql';
       autoSchemaFile: 'schema.gql',
       introspection: true,
       playground: true,
+      installSubscriptionHandlers: true,
+      context: async ({ req, connection }) => {
+        if (connection) {
+          // subscriptions
+          return {
+            req: {
+              headers: { authorization: connection.context.Authorization },
+            },
+          };
+        }
+        // queries and mutations
+        return { req };
+      },
     }),
     forwardRef(() => UserModule),
     AuthModule,
@@ -27,6 +42,8 @@ import { GraphQLModule } from '@nestjs/graphql';
     CategoryModule,
     EventModule,
     MultimediaModule,
+    MetricsModule,
+    PromotionalCodeModule,
   ],
 })
 export class AppModule { }

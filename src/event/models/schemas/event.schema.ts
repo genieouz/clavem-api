@@ -6,8 +6,9 @@ import { categoryModelName } from '~/category/category.model-name';
 import { EventType } from '~/event/enums/event-type.enum';
 import { EventAccessType } from '~/event/enums/event-access-type.enum';
 import { TicketSchema } from '~/event/models/schemas/ticket.schema';
-import { EventStatus } from '~/event/enums/event-status.enum';
+import { EventState } from '~/event/enums/event-state.enum';
 import { attachmentRecordSchema } from '~/attachment/models/schemas/attachment-record.schema';
+import { EventStatus } from '~/event/enums/event-status.enum';
 
 export const EventSchema = new Schema({
     description: {
@@ -19,10 +20,15 @@ export const EventSchema = new Schema({
     locationAccuracy: {
         type: String,
     },
+    state: {
+        type: String,
+        enum: Object.keys(EventState),
+        default: EventState.DESACTIVATED,
+    },
     status: {
         type: String,
         enum: Object.keys(EventStatus),
-        default: EventStatus.Desactivated,
+        default: EventStatus.PENDING,
     },
     type: {
         type: String,
@@ -114,5 +120,5 @@ export const EventSchema = new Schema({
     },
     archives: {
         type: [attachmentRecordSchema]
-    }
-});
+    },
+}, { timestamps: true });

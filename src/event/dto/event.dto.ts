@@ -4,12 +4,14 @@ import { IReservationRequirements } from "~/event/models/interfaces/reservation-
 import { ITicket } from "~/event/models/interfaces/ticket.interface";
 import { EventAccessType } from "~/event/enums/event-access-type.enum";
 import { EventType } from "~/event/enums/event-type.enum";
-import { EventStatus } from "~/event/enums/event-status.enum";
+import { EventState } from "~/event/enums/event-state.enum";
+import { EventStatus } from "../enums/event-status.enum";
 
 export class EventDto {
     description: string;
     address: string;
     locationAccuracy: string;
+    state: EventState;
     status: EventStatus;
     type: EventType;
     name: string;

@@ -6,6 +6,7 @@ import { EventAccessType } from "~/event/enums/event-access-type.enum";
 import { IUser } from "~/user/interfaces/user.interface";
 import { ICategory } from "~/category/interfaces/category.interface";
 import { EventType } from "~/event/enums/event-type.enum";
+import { EventState } from "~/event/enums/event-state.enum";
 import { EventStatus } from "~/event/enums/event-status.enum";
 
 export interface IEvent {
@@ -13,6 +14,7 @@ export interface IEvent {
     description: string;
     address: string;
     locationAccuracy: string;
+    state: EventState;
     status: EventStatus;
     type: EventType;
     name: string;
