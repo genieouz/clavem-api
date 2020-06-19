@@ -10,6 +10,7 @@ import { MultimediaModule } from './multimedia/multimedia.module';
 import { GraphQLModule } from '@nestjs/graphql';
 import { MetricsModule } from './metrics/metrics.module';
 import { PromotionalCodeModule } from './promotional-code/promotional-code.module';
+import { AccessCodeModule } from './access-code/access-code.module';
 
 @Module({
   imports: [
@@ -44,6 +45,7 @@ import { PromotionalCodeModule } from './promotional-code/promotional-code.modul
     MultimediaModule,
     MetricsModule,
     PromotionalCodeModule,
+    AccessCodeModule,
   ],
 })
 export class AppModule { }

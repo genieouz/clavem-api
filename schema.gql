@@ -3,6 +3,37 @@
 # !!!   DO NOT MODIFY THIS FILE BY YOURSELF   !!!
 # -----------------------------------------------
 
+input AccessCodeDto {
+  username: String!
+  password: String!
+  role: AccessCodeRole!
+}
+
+type AccessCodeEntity {
+  _id: ID!
+  organizer: UserEntity!
+  username: String!
+  password: String!
+  role: AccessCodeRole!
+}
+
+enum AccessCodeRole {
+  ADMIN
+  EDITOR
+  PARTICIPANTS_MANAGER
+  OBSERVER
+}
+
+type AccessCodesEntity {
+  recordsLength: Float!
+  totalRecords: Float!
+  offset: Float!
+  limit: Float!
+  pages: Float!
+  currentPage: Float!
+  records: [AccessCodeEntity!]!
+}
+
 """Arbitrary object"""
 scalar Any
 
@@ -118,11 +149,19 @@ type ImageSizes {
   lg: ID
 }
 
+enum InternalRole {
+  STRATEGIC
+  FINANCE
+  MARKETING
+  STANDARD
+}
+
 type Mutation {
   changeEventState(state: EventState!, eventId: ID!): EventEntity!
   changeEventStatus(status: EventStatus!, eventId: ID!): EventEntity!
   createCategory(categoryInput: CategoryInput!): CategoryEntity!
   createPromotionalCode(promotionalCodeDto: PromotionalCodeDto!): PromotionalCodeEntity!
+  createAccessCode(accessCodeDto: AccessCodeDto!): AccessCodeEntity!
 }
 
 """OrderBy direction"""
@@ -193,8 +232,11 @@ type Query {
   fetchEvent(eventId: ID!): EventEntity!
   fetchRecentEvents: EventsEntity!
   fetchCategoryEvents(categoryId: ID!): EventsEntity!
+  fetchCurrentUser: UserEntity!
+  fetchAdmins: UsersEntity!
   fetchCategories: CategoriesEntity!
   fetchPromotionalCodes: PromotionalCodesEntity!
+  fetchAccessCodes: AccessCodesEntity!
 }
 
 input ReductionEffectDto {
@@ -234,8 +276,7 @@ type TicketRequirementsQuantity {
   categoryCriteria: String!
 }
 
-type UserEntity {
-  _id: ID!
+input UserDto {
   countryCode: String!
   role: UserRoles!
   gender: UserGender!
@@ -244,6 +285,22 @@ type UserEntity {
   lastName: String!
   firstName: String!
   email: String!
+  internalRole: InternalRole!
+}
+
+type UserEntity {
+  _id: ID!
+  countryCode: String!
+  role: UserRoles!
+  internalRole: InternalRole
+  gender: UserGender!
+  birthDate: DateTime!
+  phoneNumber: String!
+  lastName: String!
+  firstName: String!
+  password: String!
+  email: String!
+  avatar: ImageSizes
 }
 
 enum UserGender {
@@ -255,4 +312,14 @@ enum UserRoles {
   USER
   ADMIN
   ORGANIZER
+}
+
+type UsersEntity {
+  recordsLength: Float!
+  totalRecords: Float!
+  offset: Float!
+  limit: Float!
+  pages: Float!
+  currentPage: Float!
+  records: [UserEntity!]!
 }

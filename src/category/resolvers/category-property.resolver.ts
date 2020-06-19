@@ -5,7 +5,13 @@ import { ICategory } from "~/category/interfaces/category.interface";
 import { CategoryService } from "~/category/services/category.service";
 import { EventStatus } from "~/event/enums/event-status.enum";
 import { EventState } from "~/event/enums/event-state.enum";
+import { CurrentUser } from "~/auth/decorators/current-user.decorator";
+import { IUser } from "~/user/interfaces/user.interface";
+import { UserRoles } from "~/user/enums/user-roles.enum";
+import { UseGuards } from "@nestjs/common";
+import { AuthGuard } from "~/auth/guards/auth-guard";
 
+@UseGuards(AuthGuard)
 @Resolver(of => CategoryEntity)
 export class CategoryPropertyResolver {
     constructor(
@@ -16,63 +22,81 @@ export class CategoryPropertyResolver {
     @ResolveProperty(returns => Number)
     refused(
         @Parent() category: ICategory,
+        @CurrentUser() currentUser: IUser,
     ): Promise<number> {
-        return this.eventService.count({ category: category._id, status: EventStatus.REFUSED });
+        const filterOnCreatedBy = (currentUser.role === UserRoles.ORGANIZER) ? { createdBy: currentUser._id } : {};
+        return this.eventService.count({ category: category._id, status: EventStatus.REFUSED, ...filterOnCreatedBy });
     }
 
     @ResolveProperty(returns => Number)
     validated(
         @Parent() category: ICategory,
+        @CurrentUser() currentUser: IUser,
     ): Promise<number> {
-        return this.eventService.count({ category: category._id, status: EventStatus.VALIDATED });
+        const filterOnCreatedBy = (currentUser.role === UserRoles.ORGANIZER) ? { createdBy: currentUser._id } : {};
+        return this.eventService.count({ category: category._id, status: EventStatus.VALIDATED, ...filterOnCreatedBy });
     }
 
     @ResolveProperty(returns => Number)
     blocked(
         @Parent() category: ICategory,
+        @CurrentUser() currentUser: IUser,
     ): Promise<number> {
-        return this.eventService.count({ category: category._id, status: EventStatus.BLOCKED });
+        const filterOnCreatedBy = (currentUser.role === UserRoles.ORGANIZER) ? { createdBy: currentUser._id } : {};
+        return this.eventService.count({ category: category._id, status: EventStatus.BLOCKED, ...filterOnCreatedBy });
     }
 
     @ResolveProperty(returns => Number)
     pending(
         @Parent() category: ICategory,
+        @CurrentUser() currentUser: IUser,
     ): Promise<number> {
-        return this.eventService.count({ category: category._id, status: EventStatus.PENDING });
+        const filterOnCreatedBy = (currentUser.role === UserRoles.ORGANIZER) ? { createdBy: currentUser._id } : {};
+        return this.eventService.count({ category: category._id, status: EventStatus.PENDING, ...filterOnCreatedBy });
     }
 
     @ResolveProperty(returns => Number)
     activated(
         @Parent() category: ICategory,
+        @CurrentUser() currentUser: IUser,
     ): Promise<number> {
-        return this.eventService.count({ category: category._id, state: EventState.ACTIVATED });
+        const filterOnCreatedBy = (currentUser.role === UserRoles.ORGANIZER) ? { createdBy: currentUser._id } : {};
+        return this.eventService.count({ category: category._id, state: EventState.ACTIVATED, ...filterOnCreatedBy });
     }
 
     @ResolveProperty(returns => Number)
     desactivated(
         @Parent() category: ICategory,
+        @CurrentUser() currentUser: IUser,
     ): Promise<number> {
-        return this.eventService.count({ category: category._id, state: EventState.DESACTIVATED });
+        const filterOnCreatedBy = (currentUser.role === UserRoles.ORGANIZER) ? { createdBy: currentUser._id } : {};
+        return this.eventService.count({ category: category._id, state: EventState.DESACTIVATED, ...filterOnCreatedBy });
     }
 
     @ResolveProperty(returns => Number)
     archived(
         @Parent() category: ICategory,
+        @CurrentUser() currentUser: IUser,
     ): Promise<number> {
-        return this.eventService.count({ category: category._id, state: EventState.ARCHIVED });
+        const filterOnCreatedBy = (currentUser.role === UserRoles.ORGANIZER) ? { createdBy: currentUser._id } : {};
+        return this.eventService.count({ category: category._id, state: EventState.ARCHIVED, ...filterOnCreatedBy });
     }
 
     @ResolveProperty(returns => Number)
     paidEntrance(
         @Parent() category: ICategory,
+        @CurrentUser() currentUser: IUser,
     ): Promise<number> {
-        return this.eventService.count({ category: category._id, paidEntrance: true });
+        const filterOnCreatedBy = (currentUser.role === UserRoles.ORGANIZER) ? { createdBy: currentUser._id } : {};
+        return this.eventService.count({ category: category._id, paidEntrance: true, ...filterOnCreatedBy });
     }
 
     @ResolveProperty(returns => Number)
     freeEntrance(
         @Parent() category: ICategory,
+        @CurrentUser() currentUser: IUser,
     ): Promise<number> {
-        return this.eventService.count({ category: category._id, paidEntrance: false });
+        const filterOnCreatedBy = (currentUser.role === UserRoles.ORGANIZER) ? { createdBy: currentUser._id } : {};
+        return this.eventService.count({ category: category._id, paidEntrance: false, ...filterOnCreatedBy });
     }
 }

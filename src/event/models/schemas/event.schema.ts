@@ -46,7 +46,7 @@ export const EventSchema = new Schema({
     createdBy: {
         type: Schema.Types.ObjectId,
         ref: userModelName,
-        required: false,
+        required: true,
     },
     category: {
         type: Schema.Types.ObjectId,

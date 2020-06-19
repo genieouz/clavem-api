@@ -7,9 +7,9 @@ import { AbstractService } from '~/commons/services/abstract.service';
 import { UserEntity } from '~/user/entities/user.entity';
 
 @Injectable()
-export class UserService extends AbstractService<UserEntity> {
+export class UserService extends AbstractService<IUser> {
     constructor(
-        @InjectModel(userModelName) private readonly userModel: Model<UserEntity>,
+        @InjectModel(userModelName) private readonly userModel: Model<IUser>,
     ) {
         super(userModel);
     }

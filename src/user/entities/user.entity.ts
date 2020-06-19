@@ -2,6 +2,8 @@ import { UserGender } from '~/user/enums/user-gender';
 import { UserRoles } from '~/user/enums/user-roles.enum';
 import { ApiProperty } from '@nestjs/swagger';
 import { ObjectType, Field, ID } from 'type-graphql';
+import { InternalRole } from '../enums/internal-role.enum';
+import { ImageSizes } from '~/commons/graphql/types-and-inputs/image-sizes.type';
 
 @ObjectType()
 export class UserEntity {
@@ -16,6 +18,10 @@ export class UserEntity {
   @ApiProperty({ enum: UserRoles })
   @Field(type => UserRoles)
   public role: UserRoles;
+
+  @ApiProperty({ enum: InternalRole })
+  @Field(type => InternalRole, { nullable: true })
+  public internalRole?: InternalRole;
 
   @ApiProperty({ enum: UserGender })
   @Field(type => UserGender)
@@ -38,9 +44,13 @@ export class UserEntity {
   public firstName: string;
 
   @ApiProperty()
+  @Field()
   public password: string;
 
   @ApiProperty()
   @Field()
   public email: string;
+
+  @Field(type => ImageSizes, { nullable: true })
+  public avatar: ImageSizes;
 }

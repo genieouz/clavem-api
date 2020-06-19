@@ -4,11 +4,14 @@ import { CategoryEntity } from "~/category/entities/category.entity";
 import { FindManyResult } from "~/commons/database/typings/find-many-result.interface";
 import { CategoriesEntity } from "~/category/entities/categories.entity";
 import { CategoryInput } from "~/category/dto/category.input"
+import { UseGuards } from "@nestjs/common";
+import { AuthGuard } from "~/auth/guards/auth-guard";
 
+@UseGuards(AuthGuard)
 @Resolver()
 export class CategoryResolver {
-    constructor(private readonly categoryService: CategoryService) {}
-    
+    constructor(private readonly categoryService: CategoryService) { }
+
     @Query(returns => CategoriesEntity)
     fetchCategories(): Promise<FindManyResult<CategoryEntity>> {
         return this.categoryService.findMany({});

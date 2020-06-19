@@ -24,6 +24,7 @@ import { EventModule } from '~/event/event.module';
   ],
   exports: [
     EventPosterService,
+    AvatarImageService,
   ]
 })
 export class ImagesModule { }
