@@ -12,9 +12,10 @@ import { ReservationRequirements } from "~/event/entity/reservation-requirements
 import { CategoryEntity } from "~/category/entities/category.entity";
 import { UserEntity } from "~/user/entities/user.entity";
 import { EventStatus } from "../enums/event-status.enum";
+import { Document } from 'mongoose';
 
 @ObjectType()
-export class EventEntity {
+export class EventEntity extends Document {
     @Field(type => ID)
     _id: string;
 

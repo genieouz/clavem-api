@@ -15,6 +15,8 @@ import { OrderByDirection } from "~/commons/graphql/types-and-inputs/order-by-di
 import { AnyObject } from "~/commons/typings/typescript";
 import { EventState } from "../enums/event-state.enum";
 import { EventStatus } from "../enums/event-status.enum";
+import { TicketDto } from "../dto/ticket.dto";
+import { IUpdateResult } from "~/commons/typings/mongoose.typings";
 
 @UseGuards(AuthGuard, RolesGuard)
 @Resolver()
@@ -75,5 +77,27 @@ export class EventResolver {
         @Args({ name: 'status', type: () => EventStatus }) status: EventState,
     ): Promise<EventEntity> {
         return this.eventService.updateOneById(eventId, { status: status });
+    }
+
+    @ForRoles(UserRoles.ORGANIZER)
+    @Mutation(returns => EventEntity)
+    async createTicket(
+        @CurrentUser() currentUser: IUser,
+        @Args({ name: 'eventId', type: () => ID }) eventId: string,
+        @Args({ name: 'ticketDto', type: () => TicketDto }) ticketDto: TicketDto,
+    ): Promise<EventEntity> {
+        const result: IUpdateResult = await this.eventService.createTicket(eventId, ticketDto);
+        return this.eventService.findOneById(eventId);
+    }
+
+    @ForRoles(UserRoles.ORGANIZER)
+    @Mutation(returns => EventEntity)
+    async removeTicket(
+        @CurrentUser() currentUser: IUser,
+        @Args({ name: 'eventId', type: () => ID }) eventId: string,
+        @Args({ name: 'ticketId', type: () => ID }) ticketId: string,
+    ): Promise<EventEntity> {
+        const result: IUpdateResult = await this.eventService.removeTicket(eventId, ticketId);
+        return this.eventService.findOneById(eventId);
     }
 }

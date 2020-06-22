@@ -159,6 +159,8 @@ enum InternalRole {
 type Mutation {
   changeEventState(state: EventState!, eventId: ID!): EventEntity!
   changeEventStatus(status: EventStatus!, eventId: ID!): EventEntity!
+  createTicket(ticketDto: TicketDto!, eventId: ID!): EventEntity!
+  removeTicket(ticketId: ID!, eventId: ID!): EventEntity!
   createCategory(categoryInput: CategoryInput!): CategoryEntity!
   createPromotionalCode(promotionalCodeDto: PromotionalCodeDto!): PromotionalCodeEntity!
   createAccessCode(accessCodeDto: AccessCodeDto!): AccessCodeEntity!
@@ -259,6 +261,13 @@ type ReservationRequirements {
 
 type Ticket {
   _id: ID!
+  name: String!
+  categoryCriteria: String!
+  quantity: Float!
+  price: Float!
+}
+
+input TicketDto {
   name: String!
   categoryCriteria: String!
   quantity: Float!

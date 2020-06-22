@@ -17,7 +17,7 @@ import { UserRoles } from '~/user/enums/user-roles.enum';
 export class UserController {
     constructor(
         private readonly avatarImageService: AvatarImageService,
-        private readonly userService: UserService
+        private readonly userService: UserService,
     ) { }
 
     @ForRoles(UserRoles.ADMIN)
