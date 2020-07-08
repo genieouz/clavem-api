@@ -53,4 +53,10 @@ export class UserEntity {
 
   @Field(type => ImageSizes, { nullable: true })
   public avatar: ImageSizes;
+
+  @Field()
+  public city: string;
+
+  @Field()
+  public district: string;
 }

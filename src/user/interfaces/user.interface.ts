@@ -14,4 +14,6 @@ export interface IUser extends Document {
   password: string;
   email: string;
   avatar: ImageSizes;
+  city: string;
+  district: string;
 }

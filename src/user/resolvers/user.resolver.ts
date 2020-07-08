@@ -27,4 +27,9 @@ export class UserResover {
     fetchAdmins(): Promise<FindManyResult<UserEntity>> {
         return this.userService.findMany({ role: UserRoles.ADMIN });
     }
+
+    @Query(returns => UsersEntity)
+    fetchClients(): Promise<FindManyResult<UserEntity>> {
+        return this.userService.findMany({ role: UserRoles.USER });
+    }
 }   

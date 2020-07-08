@@ -41,6 +41,13 @@ export const UserSchema = new Schema({
     enum: Object.keys(InternalRole),
     default: InternalRole.STANDARD,
   },
-  avatar: imageSizesNestedObject,
+  avatar: imageSizesNestedObject, 
+  city: {
+    type: String
+  },
+  district: {
+    type: String
+  }
+
 
 }, { timestamps: true });

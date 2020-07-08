@@ -242,6 +242,7 @@ type Query {
   fetchCategoryEvents(categoryId: ID!): EventsEntity!
   fetchCurrentUser: UserEntity!
   fetchAdmins: UsersEntity!
+  fetchClients: UsersEntity!
   login(loginInput: LoginDto!): SessionEntity!
   fetchCategories: CategoriesEntity!
   fetchPromotionalCodes: PromotionalCodesEntity!
@@ -334,6 +335,8 @@ type UserEntity {
   password: String!
   email: String!
   avatar: ImageSizes
+  city: String!
+  district: String!
 }
 
 enum UserGender {

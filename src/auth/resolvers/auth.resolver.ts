@@ -25,6 +25,7 @@ export class AuthResolver {
     register(
         @Args({ name: 'registerInput', type: () => RegisterDto }) registerDto: RegisterDto
     ): Promise<SessionEntity> {
+        console.log('HERE ', registerDto)
         return this.authService.signup({ role: UserRoles.USER, ...registerDto }); 
     }
 }
