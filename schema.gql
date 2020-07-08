@@ -156,11 +156,17 @@ enum InternalRole {
   STANDARD
 }
 
+input LoginDto {
+  email: String!
+  password: String!
+}
+
 type Mutation {
   changeEventState(state: EventState!, eventId: ID!): EventEntity!
   changeEventStatus(status: EventStatus!, eventId: ID!): EventEntity!
   createTicket(ticketDto: TicketDto!, eventId: ID!): EventEntity!
   removeTicket(ticketId: ID!, eventId: ID!): EventEntity!
+  register(registerInput: RegisterDto!): SessionEntity!
   createCategory(categoryInput: CategoryInput!): CategoryEntity!
   createPromotionalCode(promotionalCodeDto: PromotionalCodeDto!): PromotionalCodeEntity!
   createAccessCode(accessCodeDto: AccessCodeDto!): AccessCodeEntity!
@@ -236,6 +242,7 @@ type Query {
   fetchCategoryEvents(categoryId: ID!): EventsEntity!
   fetchCurrentUser: UserEntity!
   fetchAdmins: UsersEntity!
+  login(loginInput: LoginDto!): SessionEntity!
   fetchCategories: CategoriesEntity!
   fetchPromotionalCodes: PromotionalCodesEntity!
   fetchAccessCodes: AccessCodesEntity!
@@ -251,12 +258,29 @@ type ReductionEffectEntity {
   reduction: Float!
 }
 
+input RegisterDto {
+  phoneNumber: String!
+  lastName: String!
+  firstName: String!
+  password: String!
+  email: String!
+  birthDate: DateTime!
+  gender: String!
+  city: String!
+  district: String!
+}
+
 type ReservationRequirements {
   allowed: Boolean!
   payWhenReservation: Boolean!
   reservationFeeRefundable: Boolean!
   percentageToPay: Float!
   limiteDateConfirmation: DateTime!
+}
+
+type SessionEntity {
+  token: String!
+  user: UserEntity!
 }
 
 type Ticket {
@@ -299,12 +323,12 @@ input UserDto {
 
 type UserEntity {
   _id: ID!
-  countryCode: String!
+  countryCode: String
   role: UserRoles!
   internalRole: InternalRole
   gender: UserGender!
-  birthDate: DateTime!
-  phoneNumber: String!
+  birthDate: DateTime
+  phoneNumber: String
   lastName: String!
   firstName: String!
   password: String!

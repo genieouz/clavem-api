@@ -41,7 +41,7 @@ export class AuthService {
   }
 
   async signin(credentials: LoginDto): Promise<SessionEntity> {
-    const user = await this.userService.findOne({ email: credentials.email, password: credentials.password });
+    const user = await this.userService.findOne(credentials);
     if (!user) {
       throw new NotFoundException('Ce compte n\'existe pas!');
     }

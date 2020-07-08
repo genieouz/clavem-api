@@ -12,27 +12,27 @@ export class UserEntity {
   public _id: string;
 
   @ApiProperty()
-  @Field()
+  @Field({ nullable: true })
   public countryCode: string;
 
   @ApiProperty({ enum: UserRoles })
   @Field(type => UserRoles)
   public role: UserRoles;
 
-  @ApiProperty({ enum: InternalRole })
+  @ApiProperty({ enum: InternalRole, nullable: true })
   @Field(type => InternalRole, { nullable: true })
   public internalRole?: InternalRole;
 
-  @ApiProperty({ enum: UserGender })
+  @ApiProperty({ enum: UserGender, nullable: true })
   @Field(type => UserGender)
   public gender?: UserGender;
 
   @ApiProperty()
-  @Field()
+  @Field({ nullable: true })
   public birthDate?: Date;
 
   @ApiProperty()
-  @Field()
+  @Field({ nullable: true })
   public phoneNumber: string;
 
   @ApiProperty()

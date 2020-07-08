@@ -41,7 +41,6 @@ export class EventResolver {
     }
 
     @Query(returns => EventsEntity)
-    @ForRoles(UserRoles.ADMIN, UserRoles.ORGANIZER)
     fetchRecentEvents(
         @CurrentUser() currentUser: IUser,
     ): Promise<FindManyResult<EventEntity>> {
@@ -49,13 +48,13 @@ export class EventResolver {
         return this.eventService.findMany({ startDate: { $gte: new Date() }, ...filterOnCreatedBy }, { limit: 10, orderBy: { property: 'startDate', direction: OrderByDirection.Asc } });
     }
 
-    @ForRoles(UserRoles.ADMIN, UserRoles.ORGANIZER)
     @Query(returns => EventsEntity)
     fetchCategoryEvents(
         @CurrentUser() currentUser: IUser,
         @Args({ name: 'categoryId', type: () => ID }) categoryId: string
     ): Promise<FindManyResult<EventEntity>> {
         const filterOnCreatedBy: AnyObject = currentUser.role === UserRoles.ORGANIZER ? { createdBy: currentUser._id } : {};
+        console.log('IM HERE ', filterOnCreatedBy);
         return this.eventService.findMany({ category: categoryId, ...filterOnCreatedBy });
     }
 
