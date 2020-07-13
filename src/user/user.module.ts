@@ -6,11 +6,14 @@ import { Module, forwardRef } from '@nestjs/common';
 import { ImagesModule } from '~/multimedia/images/images.module';
 import { UserResover } from '~/user/resolvers/user.resolver';
 import { UserController } from '~/user/user.controller';
+import { UserPropertyResolver } from '~/user/resolvers/user-property.resolver';
+import { CardModule } from '~/card/card.module';
 
 @Module({
   imports: [
     MongooseModule.forFeature([{ name: userModelName, schema: UserSchema }]),
     forwardRef(() => ImagesModule),
+    forwardRef(() => CardModule)
   ],
   controllers: [
     UserController
@@ -18,6 +21,7 @@ import { UserController } from '~/user/user.controller';
   providers: [
     UserService,
     UserResover,
+    UserPropertyResolver,
   ],
   exports: [UserService, MongooseModule],
 })

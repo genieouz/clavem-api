@@ -17,13 +17,13 @@ import { EventState } from "../enums/event-state.enum";
 import { EventStatus } from "../enums/event-status.enum";
 import { TicketDto } from "../dto/ticket.dto";
 import { IUpdateResult } from "~/commons/typings/mongoose.typings";
+import { PreferenceDto } from "../dto/preference.dto";
 
 @UseGuards(AuthGuard, RolesGuard)
 @Resolver()
 export class EventResolver {
     constructor(private readonly eventService: EventService) { }
 
-    @ForRoles(UserRoles.ADMIN, UserRoles.ORGANIZER)
     @Query(returns => EventsEntity)
     fetchEvents(
         @CurrentUser() currentUser: IUser,
@@ -32,7 +32,6 @@ export class EventResolver {
         return this.eventService.findMany({ ...filterOnCreatedBy });
     }
 
-    @ForRoles(UserRoles.ADMIN, UserRoles.ORGANIZER)
     @Query(returns => EventEntity)
     fetchEvent(
         @Args({ name: 'eventId', type: () => ID }) eventId: string
@@ -56,6 +55,18 @@ export class EventResolver {
         const filterOnCreatedBy: AnyObject = currentUser.role === UserRoles.ORGANIZER ? { createdBy: currentUser._id } : {};
         console.log('IM HERE ', filterOnCreatedBy);
         return this.eventService.findMany({ category: categoryId, ...filterOnCreatedBy });
+    }
+
+    @Query(returns => [EventEntity])
+    fetchPreferences(
+        @Args({name: 'preferenceInput', type: () => PreferenceDto}) preferenceDto: PreferenceDto,
+        @CurrentUser() currentUser: IUser,
+    ): Promise<EventEntity[]> {
+        let queryFilter = {};
+        if (preferenceDto.startDate && preferenceDto.endDate) {
+            queryFilter = { $or: [{ startDate: { $gte: preferenceDto.startDate } }, { startDate: { $lte: preferenceDto.endDate } }]}
+        }
+        return this.eventService.find({});
     }
 
     @ForRoles(UserRoles.ADMIN, UserRoles.ORGANIZER)

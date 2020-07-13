@@ -43,6 +43,22 @@ type AttachmentRecord {
   extension: String!
 }
 
+type CardEntity {
+  _id: ID!
+  number: String!
+  owner: UserEntity!
+}
+
+type CardsEntity {
+  recordsLength: Float!
+  totalRecords: Float!
+  offset: Float!
+  limit: Float!
+  pages: Float!
+  currentPage: Float!
+  records: [CardEntity!]!
+}
+
 type CategoriesEntity {
   recordsLength: Float!
   totalRecords: Float!
@@ -162,6 +178,8 @@ input LoginDto {
 }
 
 type Mutation {
+  createCard(cardNumber: String!): CardEntity!
+  lostCard(emergencyCard: String, cardNumber: String!): CardEntity!
   changeEventState(state: EventState!, eventId: ID!): EventEntity!
   changeEventStatus(status: EventStatus!, eventId: ID!): EventEntity!
   createTicket(ticketDto: TicketDto!, eventId: ID!): EventEntity!
@@ -170,6 +188,7 @@ type Mutation {
   createCategory(categoryInput: CategoryInput!): CategoryEntity!
   createPromotionalCode(promotionalCodeDto: PromotionalCodeDto!): PromotionalCodeEntity!
   createAccessCode(accessCodeDto: AccessCodeDto!): AccessCodeEntity!
+  createReservation(reservationInput: ReservationInput!): Boolean!
 }
 
 """OrderBy direction"""
@@ -190,6 +209,15 @@ type Paging {
   limit: Float!
   pages: Float!
   currentPage: Float!
+}
+
+input PreferenceDto {
+  category: ID!
+  startDate: DateTime!
+  endDate: DateTime!
+  city: String!
+  region: String!
+  price: Float!
 }
 
 input PromotionalCodeDto {
@@ -236,10 +264,13 @@ type PromotionalCodesEntity {
 }
 
 type Query {
+  fetchCards: CardsEntity!
+  fetchMyCards: [CardEntity!]!
   fetchEvents: EventsEntity!
   fetchEvent(eventId: ID!): EventEntity!
   fetchRecentEvents: EventsEntity!
   fetchCategoryEvents(categoryId: ID!): EventsEntity!
+  fetchPreferences(preferenceInput: PreferenceDto!): [EventEntity!]!
   fetchCurrentUser: UserEntity!
   fetchAdmins: UsersEntity!
   fetchClients: UsersEntity!
@@ -247,6 +278,7 @@ type Query {
   fetchCategories: CategoriesEntity!
   fetchPromotionalCodes: PromotionalCodesEntity!
   fetchAccessCodes: AccessCodesEntity!
+  fetchMyReservations: [ReservationEntity!]!
 }
 
 input ReductionEffectDto {
@@ -271,12 +303,34 @@ input RegisterDto {
   district: String!
 }
 
+type ReservationEntity {
+  _id: ID!
+  card: CardEntity!
+  ticket: Ticket!
+  client: UserEntity!
+  state: ReservationState!
+  event: EventEntity!
+}
+
+input ReservationInput {
+  card: String
+  ticket: String
+  cardForOther: String
+  ticketForOther: String
+}
+
 type ReservationRequirements {
   allowed: Boolean!
   payWhenReservation: Boolean!
   reservationFeeRefundable: Boolean!
   percentageToPay: Float!
   limiteDateConfirmation: DateTime!
+}
+
+enum ReservationState {
+  ACCEPTED
+  REFUSED
+  PENDING
 }
 
 type SessionEntity {
@@ -337,6 +391,7 @@ type UserEntity {
   avatar: ImageSizes
   city: String!
   district: String!
+  cards: [CardEntity!]!
 }
 
 enum UserGender {

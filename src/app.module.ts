@@ -1,3 +1,4 @@
+import { CardModule } from './card/card.module';
 import { databaseUrl } from '~/commons/database/database.url';
 import { Module, forwardRef } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
@@ -11,9 +12,11 @@ import { GraphQLModule } from '@nestjs/graphql';
 import { MetricsModule } from './metrics/metrics.module';
 import { PromotionalCodeModule } from './promotional-code/promotional-code.module';
 import { AccessCodeModule } from './access-code/access-code.module';
+import { ReservationModule } from './reservations/reservation.module';
 
 @Module({
   imports: [
+    CardModule,
     MongooseModule.forRoot(databaseUrl, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
@@ -46,6 +49,7 @@ import { AccessCodeModule } from './access-code/access-code.module';
     MetricsModule,
     PromotionalCodeModule,
     AccessCodeModule,
+    ReservationModule,
   ],
 })
 export class AppModule { }

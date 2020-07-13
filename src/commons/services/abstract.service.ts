@@ -84,6 +84,23 @@ export abstract class AbstractService<T extends Document> {
         return results;
     }
 
+    public async find(
+        queryFilter: AnyObject,
+        clientFilter: ClientFilterInput = {},
+    ): Promise<T[]> {
+        const { offset, limit, filter, orderBy } = normalizeClientFilterForSearch(
+            clientFilter,
+        );
+        const filterWith = mergeQueryFilters(queryFilter, filter);
+        return this.abstractModel
+            .find(filterWith)
+            .sort({
+                [orderBy.property]: orderBy.direction,
+            })
+            .skip(offset)
+            .limit(limit);
+    }
+
     public async findManyByIds(
         ids: string[],
         clientFilter?: ClientFilterInput,

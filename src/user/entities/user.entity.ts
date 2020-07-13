@@ -4,6 +4,7 @@ import { ApiProperty } from '@nestjs/swagger';
 import { ObjectType, Field, ID } from 'type-graphql';
 import { InternalRole } from '../enums/internal-role.enum';
 import { ImageSizes } from '~/commons/graphql/types-and-inputs/image-sizes.type';
+import { CardEntity } from '~/card/entities/card.entity';
 
 @ObjectType()
 export class UserEntity {
@@ -59,4 +60,7 @@ export class UserEntity {
 
   @Field()
   public district: string;
+
+  @Field(type => [CardEntity])
+  public cards: CardEntity[];
 }
