@@ -301,6 +301,7 @@ type Query {
   fetchPromotionalCodes: PromotionalCodesEntity!
   fetchAccessCodes: AccessCodesEntity!
   fetchMyReservations: [ReservationEntity!]!
+  fetchEventReservations(eventId: ID!): [ReservationEntity!]!
 }
 
 input ReductionEffectDto {
@@ -332,6 +333,7 @@ type ReservationEntity {
   client: UserEntity!
   state: ReservationState!
   event: EventEntity!
+  createdAt: DateTime!
 }
 
 input ReservationInput {

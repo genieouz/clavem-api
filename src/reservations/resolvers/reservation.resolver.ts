@@ -9,6 +9,8 @@ import { IUser } from "~/user/interfaces/user.interface";
 import { ReservationInput } from "../dto/reservation.dto";
 import { ReservationEntity } from "../entities/reservation.entity";
 import { ReservationService } from "../service/reservation.service";
+import { ID } from 'type-graphql';
+import { EventService } from "~/event/event.service";
 
 @UseGuards(AuthGuard)
 @Resolver()
@@ -16,6 +18,7 @@ export class ReservationResolver {
     constructor(
         private readonly reservationService: ReservationService,
         private readonly cardService: CardService,
+        private readonly eventService: EventService,
     ) {}
 
     @Mutation(returns => Boolean)
@@ -57,5 +60,16 @@ export class ReservationResolver {
         @CurrentUser() currentUser: IUser,
     ): Promise<ReservationEntity[]> {
         return this.reservationService.find({ client: currentUser._id });
+    }
+
+    @ForRoles(UserRoles.ORGANIZER, UserRoles.ADMIN)
+    @Query(returns => [ReservationEntity])
+    public async fetchEventReservations(
+        @Args({ name: 'eventId', type: () => ID }) eventId: string,
+        @CurrentUser() currentUser: IUser,
+    ): Promise<ReservationEntity[]> {
+        const event = await this.eventService.findOneByIdOrFail(eventId);
+        const ticketIds = event.tickets.map((ticket) => ticket._id)
+        return this.reservationService.find({ ticket: { $in: ticketIds } });
     }
 }

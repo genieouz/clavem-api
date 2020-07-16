@@ -28,4 +28,7 @@ export class ReservationEntity {
 
     @Field(type => EventEntity)
     public event: IEvent;
+
+    @Field(type => Date)
+    public createdAt: Date;
 }
