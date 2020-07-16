@@ -1,3 +1,4 @@
+import { PubModule } from './pubs/pub.module';
 import { CardModule } from './card/card.module';
 import { databaseUrl } from '~/commons/database/database.url';
 import { Module, forwardRef } from '@nestjs/common';
@@ -16,6 +17,7 @@ import { ReservationModule } from './reservations/reservation.module';
 
 @Module({
   imports: [
+    PubModule,
     CardModule,
     MongooseModule.forRoot(databaseUrl, {
       useNewUrlParser: true,

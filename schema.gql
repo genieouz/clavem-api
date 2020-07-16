@@ -263,7 +263,29 @@ type PromotionalCodesEntity {
   records: [PromotionalCodeEntity!]!
 }
 
+type PubEntity {
+  _id: ID!
+  title: String!
+  object: String!
+  startDate: DateTime!
+  endDate: DateTime!
+  isUp: Boolean!
+  dependence: String!
+  attachment: ID!
+  order: Float!
+  createdAt: DateTime!
+}
+
 type Query {
+  fetchPubs: [PubEntity!]!
+  fetchUpPubs: [PubEntity!]!
+  fetchNoUpPubs: [PubEntity!]!
+  fetchActivePubs: [PubEntity!]!
+  fetchNextPubs: [PubEntity!]!
+  fetchUpActivePubs: [PubEntity!]!
+  fetchNoUpActivePubs: [PubEntity!]!
+  fetchNextUpPubs: [PubEntity!]!
+  fetchNextNoUpPubs: [PubEntity!]!
   fetchCards: CardsEntity!
   fetchMyCards: [CardEntity!]!
   fetchEvents: EventsEntity!
