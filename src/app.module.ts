@@ -1,3 +1,4 @@
+import { CommentModule } from './comment/comment.module';
 import { PubModule } from './pubs/pub.module';
 import { CardModule } from './card/card.module';
 import { databaseUrl } from '~/commons/database/database.url';
@@ -17,6 +18,7 @@ import { ReservationModule } from './reservations/reservation.module';
 
 @Module({
   imports: [
+    CommentModule,
     PubModule,
     CardModule,
     MongooseModule.forRoot(databaseUrl, {
@@ -54,4 +56,4 @@ import { ReservationModule } from './reservations/reservation.module';
     ReservationModule,
   ],
 })
-export class AppModule { }
+export class AppModule {}

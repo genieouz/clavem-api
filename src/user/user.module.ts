@@ -13,10 +13,10 @@ import { CardModule } from '~/card/card.module';
   imports: [
     MongooseModule.forFeature([{ name: userModelName, schema: UserSchema }]),
     forwardRef(() => ImagesModule),
-    forwardRef(() => CardModule)
+    forwardRef(() => CardModule),
   ],
   controllers: [
-    UserController
+    UserController,
   ],
   providers: [
     UserService,

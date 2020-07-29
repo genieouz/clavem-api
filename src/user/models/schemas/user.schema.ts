@@ -43,11 +43,9 @@ export const UserSchema = new Schema({
   },
   avatar: imageSizesNestedObject, 
   city: {
-    type: String
+    type: String,
   },
   district: {
-    type: String
-  }
-
-
+    type: String,
+  },
 }, { timestamps: true });

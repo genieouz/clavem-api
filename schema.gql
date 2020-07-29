@@ -95,6 +95,21 @@ input ClientFilterInput {
   orderBy: OrderByInput
 }
 
+input CommentDto {
+  message: String!
+  destinataire: ID!
+  event: ID!
+}
+
+type CommentEntity {
+  id: ID!
+  message: String!
+  createdAt: DateTime!
+  sender: UserEntity!
+  destinataire: UserEntity!
+  event: EventEntity!
+}
+
 """
 The javascript `Date` as string. Type represents date and time as the ISO Date string.
 """
@@ -178,12 +193,13 @@ input LoginDto {
 }
 
 type Mutation {
-  createCard(cardNumber: String!): CardEntity!
-  lostCard(emergencyCard: String, cardNumber: String!): CardEntity!
+  createComment(commentInput: CommentDto!): CommentEntity!
   changeEventState(state: EventState!, eventId: ID!): EventEntity!
   changeEventStatus(status: EventStatus!, eventId: ID!): EventEntity!
   createTicket(ticketDto: TicketDto!, eventId: ID!): EventEntity!
   removeTicket(ticketId: ID!, eventId: ID!): EventEntity!
+  createCard(cardNumber: String!): CardEntity!
+  lostCard(emergencyCard: String, cardNumber: String!): CardEntity!
   register(registerInput: RegisterDto!): SessionEntity!
   createCategory(categoryInput: CategoryInput!): CategoryEntity!
   createPromotionalCode(promotionalCodeDto: PromotionalCodeDto!): PromotionalCodeEntity!
@@ -277,6 +293,18 @@ type PubEntity {
 }
 
 type Query {
+  fetchComments: [CommentEntity!]!
+  fetchClientComments: [CommentEntity!]!
+  fetchEvents: EventsEntity!
+  fetchEvent(eventId: ID!): EventEntity!
+  fetchRecentEvents: EventsEntity!
+  fetchCategoryEvents(categoryId: ID!): EventsEntity!
+  fetchPreferences(preferenceInput: PreferenceDto!): [EventEntity!]!
+  fetchCurrentUser: UserEntity!
+  fetchAdmins: UsersEntity!
+  fetchClients: UsersEntity!
+  fetchCards: CardsEntity!
+  fetchMyCards: [CardEntity!]!
   fetchPubs: [PubEntity!]!
   fetchUpPubs: [PubEntity!]!
   fetchNoUpPubs: [PubEntity!]!
@@ -286,16 +314,6 @@ type Query {
   fetchNoUpActivePubs: [PubEntity!]!
   fetchNextUpPubs: [PubEntity!]!
   fetchNextNoUpPubs: [PubEntity!]!
-  fetchCards: CardsEntity!
-  fetchMyCards: [CardEntity!]!
-  fetchEvents: EventsEntity!
-  fetchEvent(eventId: ID!): EventEntity!
-  fetchRecentEvents: EventsEntity!
-  fetchCategoryEvents(categoryId: ID!): EventsEntity!
-  fetchPreferences(preferenceInput: PreferenceDto!): [EventEntity!]!
-  fetchCurrentUser: UserEntity!
-  fetchAdmins: UsersEntity!
-  fetchClients: UsersEntity!
   login(loginInput: LoginDto!): SessionEntity!
   fetchCategories: CategoriesEntity!
   fetchPromotionalCodes: PromotionalCodesEntity!
