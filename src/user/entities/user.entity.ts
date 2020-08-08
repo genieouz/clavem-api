@@ -25,7 +25,7 @@ export class UserEntity {
   public internalRole?: InternalRole;
 
   @ApiProperty({ enum: UserGender, nullable: true })
-  @Field(type => UserGender)
+  @Field(type => UserGender, { nullable: true })
   public gender?: UserGender;
 
   @ApiProperty()
@@ -55,10 +55,10 @@ export class UserEntity {
   @Field(type => ImageSizes, { nullable: true })
   public avatar: ImageSizes;
 
-  @Field()
+  @Field({ nullable: true })
   public city: string;
 
-  @Field()
+  @Field({ nullable: true })
   public district: string;
 
   @Field(type => [CardEntity])
