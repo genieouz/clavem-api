@@ -201,6 +201,7 @@ type Mutation {
   createCard(cardNumber: String!): CardEntity!
   lostCard(emergencyCard: String, cardNumber: String!): CardEntity!
   register(registerInput: RegisterDto!): SessionEntity!
+  updatePassword(updatePasswordDto: UpdatePasswordDto!): Boolean!
   createCategory(categoryInput: CategoryInput!): CategoryEntity!
   createPromotionalCode(promotionalCodeDto: PromotionalCodeDto!): PromotionalCodeEntity!
   createAccessCode(accessCodeDto: AccessCodeDto!): AccessCodeEntity!
@@ -315,6 +316,7 @@ type Query {
   fetchNextUpPubs: [PubEntity!]!
   fetchNextNoUpPubs: [PubEntity!]!
   login(loginInput: LoginDto!): SessionEntity!
+  resetPassword(email: String!): String!
   fetchCategories: CategoriesEntity!
   fetchPromotionalCodes: PromotionalCodesEntity!
   fetchAccessCodes: AccessCodesEntity!
@@ -406,6 +408,12 @@ type TicketRequirementsQuantity {
   categoryCriteria: String!
 }
 
+input UpdatePasswordDto {
+  password: String!
+  resetToken: String!
+  resetCode: Float!
+}
+
 input UserDto {
   countryCode: String!
   role: UserRoles!
@@ -423,7 +431,7 @@ type UserEntity {
   countryCode: String
   role: UserRoles!
   internalRole: InternalRole
-  gender: UserGender!
+  gender: UserGender
   birthDate: DateTime
   phoneNumber: String
   lastName: String!
@@ -431,8 +439,8 @@ type UserEntity {
   password: String!
   email: String!
   avatar: ImageSizes
-  city: String!
-  district: String!
+  city: String
+  district: String
   cards: [CardEntity!]!
 }
 

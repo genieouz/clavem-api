@@ -183,3 +183,7 @@ export function setupDownloadHeaders(
   res.set('Content-Disposition', `attachment;filename=${filename}`);
   return res;
 }
+
+export function getRndInteger(min, max) {
+  return Math.floor(Math.random() * (max - min) ) + min;
+}

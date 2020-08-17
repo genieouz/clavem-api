@@ -5,7 +5,7 @@ import { Injectable, ForbiddenException, NotFoundException } from '@nestjs/commo
 import {
   TWILIO_AUTH_TOKEN,
   TWILIO_ACCOUNT_SID,
-  TWILIO_PHONE_NUMBER,
+  TWILIO_PHONE_NUMBER, SIB_V3_API_KEY, API_URL
 } from '~/commons/config/env';
 import { Twilio } from 'twilio';
 import { TokenService } from '~/auth/services/token.service';
@@ -13,6 +13,9 @@ import { LoginDto } from '~/auth/dto/login.dto';
 import { SessionEntity } from '~/auth/entities/session.entity';
 import { UserEntity } from '~/user/entities/user.entity';
 import { RegisterDto } from '../dto/register.dto';
+import { generate } from 'generate-password';
+import { getRndInteger } from '~/commons/utils';
+const SibApiV3Sdk = require('sib-api-v3-sdk');
 
 @Injectable()
 export class AuthService {
@@ -54,4 +57,29 @@ export class AuthService {
     return session;
   }
 
+  async sendResetPasswordEmail(email: string): Promise<string> {
+    const defaultClient = SibApiV3Sdk.ApiClient.instance
+    const apiKey = defaultClient.authentications['api-key']
+    const apiInstance = new SibApiV3Sdk.SMTPApi()
+    apiKey.apiKey = SIB_V3_API_KEY;
+    const code = getRndInteger(1000, 9999);
+    const resetToken: string = this.tokenService.sign(
+      { sub: { email, code } },
+      TOKEN_OPTIONS.connectionTokenOption,
+    );
+    let sendSmtpEmail = {
+      to: [{ email }],
+      templateId: 1,
+      params: {
+        code,
+      }
+    }
+    apiInstance.sendTransacEmail(sendSmtpEmail).then(function(data) {
+      console.log('API called successfully. Returned data: ' + data);
+    }, function(error) {
+      console.error(error);
+    });
+    return resetToken;
+  }
+  
 }
