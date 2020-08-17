@@ -198,6 +198,8 @@ type Mutation {
   changeEventStatus(status: EventStatus!, eventId: ID!): EventEntity!
   createTicket(ticketDto: TicketDto!, eventId: ID!): EventEntity!
   removeTicket(ticketId: ID!, eventId: ID!): EventEntity!
+  updateCurrentUserPassword(newPassword: String!, oldPassword: String!): Boolean!
+  closeAccount: Boolean!
   createCard(cardNumber: String!): CardEntity!
   lostCard(emergencyCard: String, cardNumber: String!): CardEntity!
   register(registerInput: RegisterDto!): SessionEntity!

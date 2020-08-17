@@ -15,6 +15,7 @@ import { UserEntity } from '~/user/entities/user.entity';
 import { RegisterDto } from '../dto/register.dto';
 import { generate } from 'generate-password';
 import { getRndInteger } from '~/commons/utils';
+import { UserState } from '~/user/enums/user-state.enum';
 const SibApiV3Sdk = require('sib-api-v3-sdk');
 
 @Injectable()
@@ -44,7 +45,7 @@ export class AuthService {
   }
 
   async signin(credentials: LoginDto): Promise<SessionEntity> {
-    const user = await this.userService.findOne(credentials);
+    const user = await this.userService.findOne({ ...credentials, state: { $ne: UserState.CLOSED } });
     if (!user) {
       throw new NotFoundException('Ce compte n\'existe pas!');
     }

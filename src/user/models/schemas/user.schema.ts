@@ -3,6 +3,7 @@ import { UserRoles } from '~/user/enums/user-roles.enum';
 import { Schema } from 'mongoose';
 import { imageSizesNestedObject } from '~/commons/database/field-types/image-size-refs-hash.type';
 import { InternalRole } from '~/user/enums/internal-role.enum';
+import { UserState } from '~/user/enums/user-state.enum';
 
 export const UserSchema = new Schema({
   phoneNumber: {
@@ -40,6 +41,11 @@ export const UserSchema = new Schema({
     type: String,
     enum: Object.keys(InternalRole),
     default: InternalRole.STANDARD,
+  },
+  state: {
+    type: String,
+    enum: Object.keys(UserState),
+    default: UserState.FONCTIONNAL,
   },
   avatar: imageSizesNestedObject, 
   city: {
