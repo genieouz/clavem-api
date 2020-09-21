@@ -199,7 +199,8 @@ type Mutation {
   createTicket(ticketDto: TicketDto!, eventId: ID!): EventEntity!
   removeTicket(ticketId: ID!, eventId: ID!): EventEntity!
   updateCurrentUserPassword(newPassword: String!, oldPassword: String!): Boolean!
-  closeAccount: Boolean!
+  closeAccount(userId: ID): Boolean!
+  activateAccount(userId: ID!): Boolean!
   createCard(cardNumber: String!): CardEntity!
   lostCard(emergencyCard: String, cardNumber: String!): CardEntity!
   register(registerInput: RegisterDto!): SessionEntity!
@@ -305,6 +306,7 @@ type Query {
   fetchPreferences(preferenceInput: PreferenceDto!): [EventEntity!]!
   fetchCurrentUser: UserEntity!
   fetchAdmins: UsersEntity!
+  fetchOrganizers: UsersEntity!
   fetchClients: UsersEntity!
   fetchCards: CardsEntity!
   fetchMyCards: [CardEntity!]!
@@ -444,6 +446,7 @@ type UserEntity {
   city: String
   district: String
   cards: [CardEntity!]!
+  state: UserState!
 }
 
 enum UserGender {
@@ -465,4 +468,9 @@ type UsersEntity {
   pages: Float!
   currentPage: Float!
   records: [UserEntity!]!
+}
+
+enum UserState {
+  CLOSED
+  FONCTIONNAL
 }
