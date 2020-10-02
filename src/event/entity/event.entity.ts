@@ -19,28 +19,28 @@ export class EventEntity extends Document {
     @Field(type => ID)
     _id: string;
 
-    @Field()
+    @Field({ nullable: true })
     description: string;
 
-    @Field()
+    @Field({ nullable: true })
     address: string;
 
-    @Field()
+    @Field({ nullable: true })
     locationAccuracy: string;
 
-    @Field(type => EventState)
+    @Field(type => EventState, { nullable: true })
     state: EventState;
 
-    @Field(type => EventStatus)
+    @Field(type => EventStatus, { nullable: true })
     status: EventStatus;
 
-    @Field(type => EventType)
+    @Field(type => EventType, { nullable: true })
     type: EventType;
 
-    @Field()
+    @Field({ nullable: true })
     name: string;
 
-    @Field()
+    @Field({ nullable: true })
     catchyPhrase: string;
 
     @Field(type => UserEntity)
@@ -49,39 +49,39 @@ export class EventEntity extends Document {
     @Field(type => CategoryEntity)
     category: CategoryEntity;
 
-    @Field()
+    @Field({ nullable: true })
     startDate: Date;
 
-    @Field()
+    @Field({ nullable: true })
     endDate: Date;
 
-    @Field()
+    @Field({ nullable: true })
     expectedNumberOfPersons: number;
 
-    @Field(type => EventAccessType)
+    @Field(type => EventAccessType, { nullable: true })
     accessType: EventAccessType;
 
-    @Field()
+    @Field({ nullable: true })
     keepContactWithParticipant: boolean;
 
-    @Field()
+    @Field({ nullable: true })
     paidEntrance: boolean;
 
-    @Field()
+    @Field({ nullable: true })
     priceIncludingCharges: boolean;
 
-    @Field(type => [String])
+    @Field(type => [String], { nullable: true })
     categoryCriteria: string[];
 
-    @Field(type => TicketRequirements)
+    @Field(type => TicketRequirements, { nullable: true })
     purchasedTicketInvolveFreeTicket: ITicketRequirements;
 
-    @Field(type => Ticket)
+    @Field(type => Ticket, { nullable: true })
     tickets: ITicket[];
 
-    @Field(type => ReservationRequirements)
+    @Field(type => ReservationRequirements, { nullable: true })
     reservation: IReservationRequirements;
 
-    @Field(type => ImageSizes)
+    @Field(type => ImageSizes, { nullable: true })
     poster: ImageSizes;
 }

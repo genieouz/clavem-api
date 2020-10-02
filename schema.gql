@@ -120,30 +120,46 @@ enum EventAccessType {
   Free
 }
 
+input EventDto {
+  description: String
+  address: String
+  locationAccuracy: String
+  type: EventType
+  name: String
+  catchyPhrase: String
+  category: ID
+  startDate: DateTime
+  endDate: DateTime
+  expectedNumberOfPersons: Float
+  accessType: EventAccessType
+  keepContactWithParticipant: Boolean
+  paidEntrance: Boolean
+}
+
 type EventEntity {
   _id: ID!
-  description: String!
-  address: String!
-  locationAccuracy: String!
-  state: EventState!
-  status: EventStatus!
-  type: EventType!
-  name: String!
-  catchyPhrase: String!
+  description: String
+  address: String
+  locationAccuracy: String
+  state: EventState
+  status: EventStatus
+  type: EventType
+  name: String
+  catchyPhrase: String
   createdBy: UserEntity!
   category: CategoryEntity!
-  startDate: DateTime!
-  endDate: DateTime!
-  expectedNumberOfPersons: Float!
-  accessType: EventAccessType!
-  keepContactWithParticipant: Boolean!
-  paidEntrance: Boolean!
-  priceIncludingCharges: Boolean!
-  categoryCriteria: [String!]!
-  purchasedTicketInvolveFreeTicket: TicketRequirements!
-  tickets: [Ticket!]!
-  reservation: ReservationRequirements!
-  poster: ImageSizes!
+  startDate: DateTime
+  endDate: DateTime
+  expectedNumberOfPersons: Float
+  accessType: EventAccessType
+  keepContactWithParticipant: Boolean
+  paidEntrance: Boolean
+  priceIncludingCharges: Boolean
+  categoryCriteria: [String!]
+  purchasedTicketInvolveFreeTicket: TicketRequirements
+  tickets: [Ticket!]
+  reservation: ReservationRequirements
+  poster: ImageSizes
 }
 
 type EventsEntity {
@@ -198,6 +214,7 @@ type Mutation {
   changeEventStatus(status: EventStatus!, eventId: ID!): EventEntity!
   createTicket(ticketDto: TicketDto!, eventId: ID!): EventEntity!
   removeTicket(ticketId: ID!, eventId: ID!): EventEntity!
+  updateEvent(eventInput: EventDto!, eventId: ID!): EventEntity!
   updateCurrentUserPassword(newPassword: String!, oldPassword: String!): Boolean!
   closeAccount: Boolean!
   createCard(cardNumber: String!): CardEntity!

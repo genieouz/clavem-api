@@ -18,6 +18,7 @@ import { EventStatus } from "../enums/event-status.enum";
 import { TicketDto } from "../dto/ticket.dto";
 import { IUpdateResult } from "~/commons/typings/mongoose.typings";
 import { PreferenceDto } from "../dto/preference.dto";
+import { EventDto } from "../dto/event.dto";
 
 @UseGuards(AuthGuard, RolesGuard)
 @Resolver()
@@ -109,5 +110,15 @@ export class EventResolver {
     ): Promise<EventEntity> {
         const result: IUpdateResult = await this.eventService.removeTicket(eventId, ticketId);
         return this.eventService.findOneById(eventId);
+    }
+
+    @ForRoles(UserRoles.ORGANIZER)
+    @Mutation(returns => EventEntity)
+    async updateEvent(
+        @CurrentUser() currentUser: IUser,
+        @Args({ name: 'eventId', type: () => ID }) eventId: string,
+        @Args({ name: 'eventInput', type: () => EventDto }) eventInput: EventDto,
+    ): Promise<EventEntity> {
+        return this.eventService.updateOneById(eventId, eventInput);
     }
 }
