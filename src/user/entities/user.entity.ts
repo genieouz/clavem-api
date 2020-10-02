@@ -5,6 +5,7 @@ import { ObjectType, Field, ID } from 'type-graphql';
 import { InternalRole } from '../enums/internal-role.enum';
 import { ImageSizes } from '~/commons/graphql/types-and-inputs/image-sizes.type';
 import { CardEntity } from '~/card/entities/card.entity';
+import { UserState } from '../enums/user-state.enum';
 
 @ObjectType()
 export class UserEntity {
@@ -63,4 +64,7 @@ export class UserEntity {
 
   @Field(type => [CardEntity])
   public cards: CardEntity[];
+
+  @Field(type => UserState)
+  public state: UserState;
 }

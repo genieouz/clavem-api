@@ -6,5 +6,5 @@ export enum UserState {
 }
 
 registerEnumType(UserState, {
-    name: 'InternalRole',
+    name: 'UserState',
 });

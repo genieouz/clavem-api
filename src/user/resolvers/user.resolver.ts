@@ -8,6 +8,7 @@ import { UsersEntity } from "../entities/users.entity";
 import { UserService } from "../services/user.service";
 import { UserRoles } from "../enums/user-roles.enum";
 import { UserState } from "../enums/user-state.enum";
+import { ID } from 'type-graphql';
 
 @UseGuards(AuthGuard)
 @Resolver()
@@ -29,6 +30,11 @@ export class UserResover {
     }
 
     @Query(returns => UsersEntity)
+    fetchOrganizers(): Promise<UsersEntity> {
+        return this.userService.findMany({ role: UserRoles.ORGANIZER });
+    }
+
+    @Query(returns => UsersEntity)
     fetchClients(): Promise<UsersEntity> {
         return this.userService.findMany({ role: UserRoles.USER });
     }
@@ -46,9 +52,18 @@ export class UserResover {
 
     @Mutation(returns => Boolean)
     async closeAccount(
+        @Args({ name: 'userId', type: () => ID, nullable: true }) userId: string,
         @CurrentUser() currentUser: IUser,
     ): Promise<boolean> {
-        await this.userService.updateOneById(currentUser._id, { state: UserState.CLOSED });
+        await this.userService.updateOneById(userId || currentUser._id, { state: UserState.CLOSED });
+        return true;
+    }
+
+    @Mutation(returns => Boolean)
+    async activateAccount(
+        @Args({ name: 'userId', type: () => ID }) userId: string,
+    ): Promise<boolean> {
+        await this.userService.updateOneById(userId, { state: UserState.FONCTIONNAL });
         return true;
     }
 }   
