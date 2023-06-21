@@ -23,8 +23,8 @@
   "dependencies": {
     "@nestjs/common": "^6.0.0",
     "@nestjs/core": "^6.0.0",
-    "@nestjs/graphql": "^6.5.3",
-    "@nestjs/jwt": "^7.0.0",
+    "@nestjs/graphql": "^7.0.13",
+    "@nestjs/jwt": "^10.0.0",
     "@nestjs/mongoose": "^6.1.2",
     "@nestjs/passport": "^6.1.0",
     "@nestjs/platform-express": "^6.0.0",
@@ -37,12 +37,12 @@
     "graphql": "^14.5.8",
     "graphql-tools": "^4.0.5",
     "jimp": "^0.8.5",
-    "jsonwebtoken": "^8.5.1",
+    "jsonwebtoken": "^9.0.0",
     "mongoose": "^5.7.1",
     "mongoose-gridfs": "^1.2.36",
     "passport": "^0.4.0",
     "passport-http-bearer": "^1.0.1",
-    "passport-jwt": "^4.0.0",
+    "passport-jwt": "^4.0.1",
     "passport-local": "^1.0.0",
     "reflect-metadata": "^0.1.12",
     "rimraf": "^2.6.2",
@@ -50,7 +50,7 @@
     "sib-api-v3-sdk": "^7.2.4",
     "sib-api-v3-typescript": "^1.2.1",
     "swagger-ui-express": "^4.1.4",
-    "twilio": "^3.42.1"
+    "twilio": "^4.0.0"
   },
   "devDependencies": {
     "@nestjs/testing": "^6.0.0",
