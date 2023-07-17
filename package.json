@@ -38,7 +38,7 @@
     "graphql-tools": "^4.0.5",
     "jimp": "^0.8.5",
     "jsonwebtoken": "^8.5.1",
-    "mongoose": "^5.7.1",
+    "mongoose": "^5.13.20",
     "mongoose-gridfs": "^1.2.36",
     "passport": "^0.4.0",
     "passport-http-bearer": "^1.0.1",
